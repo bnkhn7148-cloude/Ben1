@@ -8,46 +8,50 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap">
 <style>
-:root{--bg:#F3F5F2;--bg2:#E8EEE9;--ph:#CFDCD4;--ink:#14282A;--mute:#3C514F;--line:#D9DFDA;--accent:#B5586C}
+:root{--bg:#F3F5F2;--bg2:#E8EEE9;--ph:#CFDCD4;--ink:#14282A;--mute:#3C514F;--line:#D9DFDA;--accent:#B5586C;--err:#B3261E}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
 a{color:inherit}
 button{font-family:inherit;cursor:pointer}
-a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .wrap{max-width:1184px;margin:0 auto;padding:0 24px}
-section{padding:72px 0}
+section{padding:72px 0;scroll-margin-top:76px}
 .alt{background:var(--bg2)}
 main section+section:not(.alt){border-top:1px solid var(--line)}
 h1,h2,h3{margin:0;font-weight:300;text-wrap:balance}
 h2{font-size:clamp(28px,4vw,38px);margin-bottom:8px}
 .sub{color:var(--mute);font-size:17px;max-width:680px;margin:0 0 32px}
 .eyebrow{font-size:14px;letter-spacing:1px;color:var(--accent);font-weight:500}
-.btn{display:inline-block;text-decoration:none;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:16px;padding:13px 26px;border-radius:999px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:16px;padding:13px 26px;border-radius:999px;transition:opacity .15s,background .15s}
+.btn:hover{opacity:.88}
 .btn.solid{background:var(--ink);color:var(--bg)}
 .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
 .btn.sm{font-size:14px;padding:9px 18px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .grid{display:grid;gap:20px}
 .ph{background:var(--ph);border-radius:12px;display:flex;align-items:flex-end;padding:10px;font-size:13px;color:var(--mute);overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
 /* nav */
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
-.nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
+header{position:sticky;top:0;z-index:20;background:rgba(243,245,242,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding-block:12px}
 .logo{font-size:22px;font-weight:700;text-decoration:none}
-nav.links{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:16px}
-nav.links a{text-decoration:none}
+nav.links{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:16px}
+nav.links a{text-decoration:none;padding:4px 0}
 nav.links a:hover{color:var(--accent)}
-.nav-actions{display:flex;align-items:center;gap:10px}
+.nav-actions{display:flex;align-items:center;gap:8px}
 /* hero */
 .hero{display:flex;flex-wrap:wrap;gap:48px;align-items:stretch;padding-block:64px}
-.hero>div{flex:1 1 380px;min-width:0}
+.hero-copy{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.hero-media{flex:1 1 380px;min-width:0}
 .hero h1{font-size:clamp(36px,6vw,60px);line-height:1.1;margin:16px 0 20px}
 .hero p{font-size:19px;color:var(--mute);max-width:520px;margin:0 0 28px}
-.hero .ph{aspect-ratio:1/1;min-height:0;border-radius:24px;padding:0}.row{display:flex;flex-wrap:wrap;gap:12px}
+.hero .ph{aspect-ratio:1/1;min-height:0;border-radius:24px;padding:0}
+.row{display:flex;flex-wrap:wrap;gap:12px}
 /* cards */
 .cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .card{background:var(--bg);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.card .ph{height:150px}
+.card .ph{height:160px}
 .card .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
 .card h3{font-size:22px;font-weight:500}
 .card .meta{white-space:nowrap;color:var(--mute);font-size:15px}
@@ -63,10 +67,11 @@ nav.links a:hover{color:var(--accent)}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .opt{text-align:right;padding:16px;border-radius:14px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);font-size:16px;min-height:56px}
 .opt:hover{background:#fff}
-.link{background:none;border:none;color:var(--mute);text-decoration:underline;font-size:15px;padding:8px 0;align-self:flex-start}
+.link{background:none;border:none;color:var(--mute);text-decoration:underline;font-size:15px;padding:4px 0}
 .rec{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--bg);border-radius:14px;padding:14px 16px}
 .rec b{font-weight:500;font-size:17px}
 .rec small{display:block;color:var(--mute);font-size:14px}
+.quiz-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:4px}
 .disc{font-size:13px;color:var(--mute)}
 /* shop */
 .shop{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
@@ -75,15 +80,16 @@ nav.links a:hover{color:var(--accent)}
 .prod h3{font-size:18px;font-weight:500}
 .prod p{margin:0;font-size:14px;color:var(--mute)}
 .prod .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
-.cart{margin-top:28px;background:var(--bg2);border-radius:20px;padding:24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+.cart{margin-top:28px;background:var(--bg2);border-radius:20px;padding:24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;scroll-margin-top:90px}
 .cart>div{flex:1 1 300px;min-width:0}
 .cart h3{font-size:22px;font-weight:500;margin-bottom:10px}
-.line{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
+.line{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:10px 0}
 .qty{display:flex;align-items:center;gap:8px}
 .qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:18px;line-height:1}
-.note{font-size:14px;color:var(--mute)}
+.note{font-size:14px;color:var(--mute);margin:0 0 8px}
+.err-msg{font-size:14px;color:var(--err);font-weight:500;min-height:20px;margin:4px 0}
 .fields{display:grid;gap:8px;margin:10px 0}
-.fields input{font:inherit;padding:12px 14px;border:1px solid var(--ink);border-radius:12px;background:var(--bg);color:var(--ink)}
+.fields input{font:inherit;padding:12px 14px;border:1px solid var(--ink);border-radius:12px;background:var(--bg);color:var(--ink);width:100%}
 /* club */
 .perks{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-bottom:28px}
 .perk{background:var(--bg2);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:8px}
@@ -95,7 +101,10 @@ nav.links a:hover{color:var(--accent)}
 /* gift */
 .gift{display:flex;flex-wrap:wrap;gap:48px;align-items:center}
 .gift>div{flex:1 1 360px;min-width:0}
-.gift .ph{min-height:260px;border-radius:24px;padding:20px}
+.gift-card-visual{background:linear-gradient(135deg,var(--ink) 0%,#233F42 100%);color:var(--bg);border-radius:24px;padding:32px;min-height:240px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 30px rgba(20,40,42,.12)}
+.gift-card-visual .gc-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#C9D6CE}
+.gift-card-visual .gc-amount{font-size:48px;font-weight:300;letter-spacing:-1px}
+.gift-card-visual .gc-foot{font-size:14px;color:#C9D6CE}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px}
 .chip{padding:11px 20px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:16px}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
@@ -106,8 +115,16 @@ footer .cols>div{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;g
 footer a{color:var(--bg)}
 footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media (max-width:700px){nav.links{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto}nav.links a{white-space:nowrap}}
-@media (max-width:560px){.wrap{padding:0 16px}section{padding:48px 0}.qbox{padding:20px}}
+@media (max-width:760px){
+  nav.links{order:3;width:100%;gap:4px 14px;font-size:14px;padding-top:4px;border-top:1px solid var(--line)}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  section{padding:48px 0}
+  .qbox{padding:20px}
+  .btn{padding:11px 20px;font-size:15px}
+  .btn.sm{padding:8px 14px;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -117,8 +134,8 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 <a class="logo" href="#top" id="brandName" dir="ltr">Sapir skincare</a>
 <nav class="links" aria-label="ניווט ראשי">
 <a href="#treatments">טיפולים</a>
-<a href="#shop">חנות</a>
 <a href="#quiz">שאלון עור</a>
+<a href="#shop">חנות</a>
 <a href="#club">מועדון לקוחות</a>
 <a href="#gift">גיפט קארד</a>
 <a href="#contact">יצירת קשר</a>
@@ -132,16 +149,18 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 
 <main id="top">
 <div class="wrap hero">
-<div style="display:flex;flex-direction:column;justify-content:center">
+<div class="hero-copy">
 <div class="eyebrow">קוסמטיקה וטיפולי פנים</div>
 <h1>עור שמרגיש טוב,<br>בטיפול שמותאם לך.</h1>
-<p>אבחון אישי לפני כל טיפול, חומרים מקצועיים ותוצאה שרואים. טיפולי פנים, מוצרי טיפוח לבית ומועדון לקוחות שמחזיר לך על כל ביקור.</p>
+<p>אבחון אישי לפני כל טיפול, ליווי מקצועי לבית ותוצאה שרואים. טיפולי פנים, התאמת שגרת טיפוח ומועדון לקוחות שמחזיר לך על כל ביקור.</p>
 <div class="row">
 <a class="btn accent" data-link="calmark" href="#">קביעת תור</a>
-<a class="btn" href="#quiz">איזה מוצרים מתאימים לעור שלי?</a>
+<a class="btn" href="#quiz">התאמת שגרת טיפוח לעור שלי</a>
 </div>
 </div>
-<div><div class="ph" style="padding:0"><img src="hero.jpg" alt="ספיר מבצעת טיפול פנים בקליניקה" style="object-position:center 30%"></div></div>
+<div class="hero-media">
+<div class="ph"><img src="hero.jpg" alt="ספיר מבצעת טיפול פנים בקליניקה" width="800" height="800" style="object-position:center 30%"></div>
+</div>
 </div>
 
 <section id="treatments" class="alt">
@@ -152,39 +171,41 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 </section>
 
-<section id="shop">
+<section id="quiz">
+<div class="wrap quiz">
+<div>
+<div class="eyebrow">שאלון קצר · 2 שאלות</div>
+<h2 style="margin-top:12px">איזה מוצרים מתאימים לעור שלך?</h2>
+<p class="sub">עונים על שתי שאלות, מקבלים המלצה ראשונית ויכולים לשלוח את התוצאות לספיר לליווי והתאמה מדויקת לפני רכישה.</p>
+</div>
+<div class="qbox" id="quizBox" aria-live="polite"></div>
+</div>
+</section>
+
+<section id="shop" class="alt">
 <div class="wrap">
 <h2>חנות המוצרים</h2>
-<p class="sub">משלוח עד הבית דרך חברת שילוח.</p>
+<p class="sub">התאמה אישית ומשלוח עד הבית.</p>
 <div class="grid shop" id="productList"></div>
 <div class="cart" id="cart">
 <div>
 <h3>העגלה שלך</h3>
 <div id="cartLines"></div>
 </div>
-<div style="max-width:360px">
-<p class="note">משלוח: <span id="shipName">[חברת המשלוחים]</span>. הזמנה נשלחת בוואטסאפ, ותקבלי קישור תשלום מאובטח באשראי.</p>
+<div style="max-width:380px">
+<p class="note">משלוח: <span id="shipName"></span>. הזמנה נשלחת בוואטסאפ לאישור מלאי ותיאום תשלום.</p>
 <div class="fields">
 <input id="cName" placeholder="שם מלא" autocomplete="name">
 <input id="cPhone" placeholder="טלפון" type="tel" autocomplete="tel">
 <input id="cAddr" placeholder="כתובת למשלוח (רחוב, מספר, עיר)" autocomplete="street-address">
 </div>
+<div class="err-msg" id="cartErr" role="alert"></div>
 <p class="note" id="shipLine"></p>
 <p style="font-weight:500;font-size:18px;margin:8px 0">סה״כ: <span id="cartTotal">₪0</span></p>
-<button class="btn accent" id="checkout" type="button">שליחת הזמנה בוואטסאפ</button>
+<button class="btn accent" id="checkout" type="button" style="width:100%">שליחת הזמנה בוואטסאפ</button>
+<p class="note" style="margin-top:8px;font-size:13px">ללא חיוב באתר – פרטי ההזמנה נשלחים לספיר לתיאום וקישור תשלום.</p>
 </div>
 </div>
-</div>
-</section>
-
-<section id="quiz">
-<div class="wrap quiz">
-<div>
-<div class="eyebrow">שאלון קצר · 2 שאלות</div>
-<h2 style="margin-top:12px">איזה מוצרים מתאימים לעור שלך?</h2>
-<p class="sub">עונים על שתי שאלות ומקבלים המלצה על מוצרים מהחנות. ההמלצה כללית ולא מחליפה אבחון בקליניקה.</p>
-</div>
-<div class="qbox" id="quizBox" aria-live="polite"></div>
 </div>
 </section>
 
@@ -203,12 +224,18 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 
 <section id="gift" class="alt">
 <div class="wrap gift">
-<div><div class="ph" role="img" aria-label="גיפט קארד">תמונה: גיפט קארד</div></div>
+<div>
+<div class="gift-card-visual" aria-hidden="true">
+<div class="gc-top"><span dir="ltr">Sapir skincare</span><span>שובר מתנה</span></div>
+<div class="gc-amount" id="giftVisualAmount">₪150</div>
+<div class="gc-foot">תקף לטיפולי פנים ולרכישת מוצרי טיפוח בקליניקה</div>
+</div>
+</div>
 <div>
 <h2>גיפט קארד</h2>
-<p class="sub" style="margin-bottom:0">מתנה לטיפול או לסכום חופשי. נשלח במייל או בהודעה, ומומש בקביעת תור או ברכישת מוצרים.</p>
+<p class="sub" style="margin-bottom:0">מתנה לטיפול או לסכום חופשי. נשלח בהודעה או במייל, ומומש בקביעת תור או ברכישת מוצרים.</p>
 <div class="chips" id="giftChips" role="group" aria-label="בחירת סכום"></div>
-<a class="btn solid" id="giftBtn" href="#">רכישת גיפט קארד</a>
+<a class="btn solid" id="giftBtn" href="#">רכישת גיפט קארד בוואטסאפ</a>
 </div>
 </div>
 </section>
@@ -237,10 +264,10 @@ const CONFIG = {
     calmark: "https://CALMARK-LINK-HERE",
     vibu: "https://VIBU-LINK-HERE",
     instagram: "https://instagram.com/sapir_cohen_skincare",
-    whatsapp: "https://wa.me/972503568603"      // מספר בפורמט בינלאומי, בלי 0 ובלי +
+    whatsapp: "https://wa.me/972503568603"
   },
   whatsappNumber: "972503568603",
-  shipping: "[חברת המשלוחים]",
+  shipping: "משלוח עד הבית",
   shippingFee: 30,
   freeShippingFrom: 300,
   giftAmounts: [150, 250, 400]
@@ -248,14 +275,14 @@ const CONFIG = {
 
 /* תמונה: שימי נתיב בשדה img, למשל "img/facial.jpg". ריק = מקום לתמונה */
 const TREATMENTS = [
-  { name: "ניקוי פנים עמוק", meta: "[60] דק׳ · ₪[__]", desc: "טיפול בסיס לכל סוגי העור. מנקה, מנקז ומרענן.", includes: "אבחון עור, ניקוי, אדים, הוצאת סבומים, מסכה, קרם הגנה.", img: "" },
-  { name: "טיפול הידרציה", meta: "[60] דק׳ · ₪[__]", desc: "לעור יבש ועייף. מחזיר לחות ורעננות.", includes: "אבחון, פילינג עדין, סרום היאלורוני, עיסוי פנים, מסכה.", img: "" },
-  { name: "טיפול לעור בעייתי", meta: "[75] דק׳ · ₪[__]", desc: "לאקנה ועור שמן. מפחית דלקות ומאזן ייצור שומן.", includes: "אבחון, ניקוי עמוק, פילינג, טיפול מקומי, מסכה מרגיעה.", img: "" },
-  { name: "טיפול אנטי אייג׳ינג", meta: "[75] דק׳ · ₪[__]", desc: "למראה מוצק וחלק יותר, עם דגש על קמטים ופיגמנטציה.", includes: "אבחון, פילינג, סרום פעיל, עיסוי הרמה, מסכה, קרם הגנה.", img: "" }
+  { name: "ניקוי פנים עמוק", meta: "60 דק׳ · מחיר בקביעת תור", desc: "טיפול בסיס לכל סוגי העור. מנקה, מנקז ומרענן.", includes: "אבחון עור, ניקוי, אדים, הוצאת סבומים, מסכה, קרם הגנה.", img: "" },
+  { name: "טיפול הידרציה", meta: "60 דק׳ · מחיר בקביעת תור", desc: "לעור יבש ועייף. מחזיר לחות ורעננות.", includes: "אבחון, פילינג עדין, סרום היאלורוני, עיסוי פנים, מסכה.", img: "" },
+  { name: "טיפול לעור בעייתי", meta: "75 דק׳ · מחיר בקביעת תור", desc: "לאקנה ועור שמן. מפחית דלקות ומאזן ייצור שומן.", includes: "אבחון, ניקוי עמוק, פילינג, טיפול מקומי, מסכה מרגיעה.", img: "" },
+  { name: "טיפול אנטי אייג׳ינג", meta: "75 דק׳ · מחיר בקביעת תור", desc: "למראה מוצק וחלק יותר, עם דגש על קמטים ופיגמנטציה.", includes: "אבחון, פילינג, סרום פעיל, עיסוי הרמה, מסכה, קרם הגנה.", img: "" }
 ];
 
-/* tags משמשים להתאמה בשאלון: oily, dry, combo, sensitive, acne, pigment, wrinkles, redness, all
-   price: מספר בשקלים (0 = יוצג "₪[__]") */
+/* tags: oily, dry, combo, sensitive, acne, pigment, wrinkles, redness, all
+   price: מספר בשקלים (0 = יוצג "מחיר בייעוץ") */
 const PRODUCTS = [
   { id: "cleanser", name: "ג׳ל ניקוי עדין", desc: "ניקוי יומי שלא מייבש. מתאים לרוב סוגי העור.", price: 0, tags: ["all"], img: "" },
   { id: "serum-hydra", name: "סרום לחות", desc: "חומצה היאלורונית לשכבת לחות עמוקה.", price: 0, tags: ["dry", "wrinkles"], img: "" },
@@ -273,11 +300,19 @@ const CONCERN = [["acne","פצעונים"],["pigment","כתמים ופיגמנט
 /* ===== קוד ===== */
 const $ = (s) => document.querySelector(s);
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const money = (n) => n > 0 ? "₪" + n : "₪[__]";
-const photo = (src, label) => src ? '<div class="ph"><img src="' + esc(src) + '" alt="' + esc(label) + '"></div>' : '<div class="ph">תמונה: ' + esc(label) + '</div>';
+const money = (n) => n > 0 ? "₪" + n : "מחיר בייעוץ";
+const photo = (src, label) => src ? '<div class="ph"><img src="' + esc(src) + '" alt="' + esc(label) + '" loading="lazy"></div>' : '<div class="ph">תמונה: ' + esc(label) + '</div>';
 
-document.querySelectorAll("[data-link]").forEach((a) => { a.href = CONFIG.links[a.dataset.link]; a.target = "_blank"; a.rel = "noopener"; });
-$("#brandName").textContent = CONFIG.brand; $("#footName").textContent = CONFIG.brand; $("#shipName").textContent = CONFIG.shipping;
+function bindLinks() {
+  document.querySelectorAll("[data-link]").forEach((a) => {
+    const url = CONFIG.links[a.dataset.link];
+    if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
+  });
+}
+
+$("#brandName").textContent = CONFIG.brand;
+$("#footName").textContent = CONFIG.brand;
+$("#shipName").textContent = CONFIG.shipping;
 document.title = CONFIG.brand + " | טיפולי פנים";
 
 /* טיפולים */
@@ -285,8 +320,10 @@ $("#treatmentList").innerHTML = TREATMENTS.map((t) =>
   '<article class="card">' + photo(t.img, t.name) +
   '<div class="top"><h3>' + esc(t.name) + '</h3><div class="meta">' + esc(t.meta) + '</div></div>' +
   '<p>' + esc(t.desc) + '</p><div class="inc"><b style="font-weight:500">מה כולל:</b> ' + esc(t.includes) + '</div>' +
-  '<a class="btn" data-link="calmark" href="' + esc(CONFIG.links.calmark) + '" target="_blank" rel="noopener">קביעת תור לטיפול</a></article>'
+  '<a class="btn" data-link="calmark" href="#">קביעת תור לטיפול</a></article>'
 ).join("");
+
+bindLinks();
 
 /* עגלה */
 let cart = {};
@@ -294,46 +331,86 @@ try { cart = JSON.parse(localStorage.getItem("cart") || "{}"); } catch (e) { car
 const saveCart = () => { try { localStorage.setItem("cart", JSON.stringify(cart)); } catch (e) {} };
 const prodById = (id) => PRODUCTS.find((p) => p.id === id);
 
-function addToCart(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); }
-function setQty(id, q) { if (q <= 0) delete cart[id]; else cart[id] = q; saveCart(); renderCart(); }
+function addToCart(id) {
+  if (!prodById(id)) return;
+  cart[id] = (cart[id] || 0) + 1;
+  saveCart();
+  renderCart();
+}
+
+function setQty(id, q) {
+  if (q <= 0) delete cart[id];
+  else cart[id] = q;
+  saveCart();
+  renderCart();
+}
 
 function calc() {
-  const ids = Object.keys(cart).filter((id) => prodById(id));
-  const sub = ids.reduce((n, id) => n + cart[id] * prodById(id).price, 0);
-  const ship = sub > 0 && sub < CONFIG.freeShippingFrom ? CONFIG.shippingFee : 0;
-  return { ids, sub, ship, total: sub + ship };
+  const ids = Object.keys(cart).filter((id) => prodById(id) && cart[id] > 0);
+  const hasUnpriced = ids.some((id) => prodById(id).price <= 0);
+  const sub = ids.reduce((n, id) => n + cart[id] * Math.max(0, prodById(id).price), 0);
+  const ship = (!hasUnpriced && sub > 0 && sub < CONFIG.freeShippingFrom) ? CONFIG.shippingFee : 0;
+  return { ids, sub, ship, total: sub + ship, hasUnpriced };
 }
 
 function renderCart() {
-  const { ids, sub, ship, total } = calc();
+  const { ids, sub, ship, total, hasUnpriced } = calc();
   const count = ids.reduce((n, id) => n + cart[id], 0);
   $("#cartCount").textContent = count;
-  $("#cartTotal").textContent = total > 0 ? "₪" + total : "₪[__]";
-  $("#shipLine").textContent = sub > 0 ? (ship ? "עלות משלוח: ₪" + ship + " (חינם מעל ₪" + CONFIG.freeShippingFrom + ")" : "משלוח חינם") : "";
+
+  if (!ids.length) {
+    $("#cartTotal").textContent = "₪0";
+    $("#shipLine").textContent = "";
+  } else if (hasUnpriced) {
+    $("#cartTotal").textContent = sub > 0 ? "₪" + sub + " + מוצרים בייעוץ" : "יאושר מול ספיר בוואטסאפ";
+    $("#shipLine").textContent = "משלוח חינם בהזמנה מעל ₪" + CONFIG.freeShippingFrom;
+  } else {
+    $("#cartTotal").textContent = "₪" + total;
+    $("#shipLine").textContent = ship ? "עלות משלוח: ₪" + ship + " (חינם מעל ₪" + CONFIG.freeShippingFrom + ")" : "משלוח חינם";
+  }
+
   $("#cartLines").innerHTML = ids.length ? ids.map((id) => {
     const p = prodById(id);
-    return '<div class="line"><span>' + esc(p.name) + '</span><span class="qty">' +
-      '<button type="button" aria-label="הפחתה" data-dec="' + id + '">−</button><span>' + cart[id] + '</span>' +
-      '<button type="button" aria-label="הוספה" data-inc="' + id + '">+</button></span></div>';
+    const linePrice = p.price > 0 ? " · ₪" + (p.price * cart[id]) : "";
+    return '<div class="line"><span>' + esc(p.name) + '<small style="color:var(--mute)">' + linePrice + '</small></span><span class="qty">' +
+      '<button type="button" aria-label="הפחתה" data-dec="' + esc(id) + '">−</button><span>' + cart[id] + '</span>' +
+      '<button type="button" aria-label="הוספה" data-inc="' + esc(id) + '">+</button></span></div>';
   }).join("") : '<div class="note">העגלה ריקה. הוסיפי מוצר מהחנות או מההמלצה בשאלון.</div>';
+
   $("#checkout").disabled = !ids.length;
-  $("#checkout").style.opacity = ids.length ? 1 : .5;
 }
 
 $("#cartLines").addEventListener("click", (e) => {
-  const inc = e.target.dataset.inc, dec = e.target.dataset.dec;
-  if (inc) setQty(inc, (cart[inc] || 0) + 1);
-  if (dec) setQty(dec, (cart[dec] || 0) - 1);
+  const incBtn = e.target.closest("[data-inc]");
+  const decBtn = e.target.closest("[data-dec]");
+  if (incBtn) setQty(incBtn.dataset.inc, (cart[incBtn.dataset.inc] || 0) + 1);
+  if (decBtn) setQty(decBtn.dataset.dec, (cart[decBtn.dataset.dec] || 0) - 1);
 });
 
 $("#checkout").addEventListener("click", () => {
-  const { ids, sub, ship, total } = calc();
+  const { ids, sub, ship, total, hasUnpriced } = calc();
   if (!ids.length) return;
-  const name = $("#cName").value.trim(), phone = $("#cPhone").value.trim(), addr = $("#cAddr").value.trim();
-  if (!name || !phone || !addr) { alert("נא למלא שם, טלפון וכתובת למשלוח"); return; }
-  const lines = ids.map((id) => "• " + prodById(id).name + " × " + cart[id]).join("\n");
-  const msg = "היי, אשמח להזמין:\n" + lines + "\n\nמוצרים: ₪" + sub + "\nמשלוח: ₪" + ship + "\nסה״כ: ₪" + total +
-    "\n\nשם: " + name + "\nטלפון: " + phone + "\nכתובת: " + addr + "\n\nאשמח לקבל קישור לתשלום.";
+  const errEl = $("#cartErr");
+  const name = $("#cName").value.trim();
+  const phone = $("#cPhone").value.trim();
+  const addr = $("#cAddr").value.trim();
+
+  if (!name) { errEl.textContent = "נא למלא שם מלא."; $("#cName").focus(); return; }
+  if (!phone) { errEl.textContent = "נא למלא מספר טלפון."; $("#cPhone").focus(); return; }
+  if (!addr) { errEl.textContent = "נא למלא כתובת למשלוח."; $("#cAddr").focus(); return; }
+  errEl.textContent = "";
+
+  const lines = ids.map((id) => {
+    const p = prodById(id);
+    return "• " + p.name + " × " + cart[id] + (p.price > 0 ? " (₪" + (p.price * cart[id]) + ")" : "");
+  }).join("\n");
+
+  const priceSummary = hasUnpriced
+    ? (sub > 0 ? "ביניים: ₪" + sub + " (חלק מהמוצרים ממתינים לאישור מחיר)" : "מחיר סופי יאושר בשיחה")
+    : "מוצרים: ₪" + sub + "\nמשלוח: ₪" + ship + "\nסה״כ: ₪" + total;
+
+  const msg = "היי ספיר, אשמח להזמין:\n" + lines + "\n\n" + priceSummary +
+    "\n\nשם: " + name + "\nטלפון: " + phone + "\nכתובת: " + addr + "\n\nאשמח להתאמה סופית וקישור לתשלום.";
   window.open("https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
 });
 
@@ -341,9 +418,18 @@ $("#checkout").addEventListener("click", () => {
 $("#productList").innerHTML = PRODUCTS.map((p) =>
   '<article class="prod">' + photo(p.img, p.name) + '<h3>' + esc(p.name) + '</h3><p>' + esc(p.desc) + '</p>' +
   '<div class="foot"><b style="font-weight:500">' + money(p.price) + '</b>' +
-  '<button class="btn solid sm" type="button" data-add="' + p.id + '">הוספה</button></div></article>'
+  '<button class="btn solid sm" type="button" data-add="' + esc(p.id) + '">הוספה</button></div></article>'
 ).join("");
-$("#productList").addEventListener("click", (e) => { if (e.target.dataset.add) addToCart(e.target.dataset.add); });
+
+$("#productList").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-add]");
+  if (btn) {
+    addToCart(btn.dataset.add);
+    const orig = btn.textContent;
+    btn.textContent = "נוסף ✓";
+    setTimeout(() => { btn.textContent = orig; }, 1100);
+  }
+});
 
 /* שאלון */
 let quiz = { step: 1, skin: null, concern: null };
@@ -354,24 +440,54 @@ function renderQuiz() {
     box.innerHTML = '<div class="step">שאלה ' + quiz.step + ' מתוך 2</div>' +
       '<div class="q">' + (quiz.step === 1 ? "איך היית מתארת את סוג העור שלך?" : "מה הכי מפריע לך בעור?") + '</div>' +
       '<div class="opts">' + list.map((o) => '<button class="opt" type="button" data-k="' + o[0] + '">' + o[1] + '</button>').join("") + '</div>' +
-      (quiz.step === 2 ? '<button class="link" type="button" data-back="1">חזרה לשאלה הקודמת</button>' : "");
+      (quiz.step === 2 ? '<button class="link" type="button" data-back="1" style="align-self:flex-start">חזרה לשאלה הקודמת</button>' : "");
   } else {
-    const skinName = SKIN.find((s) => s[0] === quiz.skin)[1], conName = CONCERN.find((c) => c[0] === quiz.concern)[1];
-    const recs = PRODUCTS.map((p) => ({ p, s: (p.tags.includes(quiz.skin) ? 2 : 0) + (p.tags.includes(quiz.concern) ? 2 : 0) + (p.tags.includes("all") ? 1 : 0) }))
-      .sort((a, b) => b.s - a.s).slice(0, 3);
-    box.innerHTML = '<div class="q">ההמלצה שלנו: עור ' + skinName + ' · ' + conName + '</div>' +
+    const skinName = SKIN.find((s) => s[0] === quiz.skin)[1];
+    const conName = CONCERN.find((c) => c[0] === quiz.concern)[1];
+    const recs = PRODUCTS.map((p) => ({
+      p,
+      s: (p.tags.includes(quiz.skin) ? 2 : 0) + (p.tags.includes(quiz.concern) ? 2 : 0) + (p.tags.includes("all") ? 1 : 0)
+    })).sort((a, b) => b.s - a.s).slice(0, 3);
+
+    const waText = "היי ספיר, מילאתי את שאלון העור באתר:\n• סוג עור: " + skinName +
+      "\n• מיקוד: " + conName + "\n• המלצות שעלו לי: " + recs.map((r) => r.p.name).join(", ") +
+      "\n\nאשמח להתייעץ איתך מה הכי מתאים לי.";
+    const waHref = "https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent(waText);
+
+    box.innerHTML = '<div class="q">התאמה ראשונית: עור ' + esc(skinName) + ' · ' + esc(conName) + '</div>' +
       recs.map((r) => '<div class="rec"><div><b>' + esc(r.p.name) + '</b><small>' + esc(r.p.desc) + '</small></div>' +
-        '<button class="btn solid sm" type="button" data-add="' + r.p.id + '">הוספה לעגלה</button></div>').join("") +
-      '<div class="disc">ההמלצה כללית. לאבחון מדויק קבעי תור.</div>' +
-      '<button class="link" type="button" data-reset="1">להתחיל מחדש</button>';
+        '<button class="btn solid sm" type="button" data-add="' + esc(r.p.id) + '">הוספה לעגלה</button></div>').join("") +
+      '<a class="btn accent" href="' + waHref + '" target="_blank" rel="noopener">שליחת התוצאות לספיר לייעוץ אישי</a>' +
+      '<div class="disc">ההמלצה כללית ולא מחליפה אבחון אישי.</div>' +
+      '<div class="quiz-actions">' +
+      '<button class="link" type="button" data-reset="1">להתחיל מחדש</button>' +
+      '<a class="link" href="#cart" id="quizCartLink" style="display:none">מעבר לעגלה ←</a>' +
+      '</div>';
   }
 }
+
 $("#quizBox").addEventListener("click", (e) => {
-  const t = e.target;
-  if (t.dataset.k) { if (quiz.step === 1) { quiz.skin = t.dataset.k; quiz.step = 2; } else { quiz.concern = t.dataset.k; quiz.step = 3; } renderQuiz(); }
-  else if (t.dataset.back) { quiz.step = 1; renderQuiz(); }
-  else if (t.dataset.reset) { quiz = { step: 1, skin: null, concern: null }; renderQuiz(); }
-  else if (t.dataset.add) { addToCart(t.dataset.add); t.textContent = "נוסף ✓"; }
+  const opt = e.target.closest("[data-k]");
+  const back = e.target.closest("[data-back]");
+  const reset = e.target.closest("[data-reset]");
+  const add = e.target.closest("[data-add]");
+
+  if (opt) {
+    if (quiz.step === 1) { quiz.skin = opt.dataset.k; quiz.step = 2; }
+    else { quiz.concern = opt.dataset.k; quiz.step = 3; }
+    renderQuiz();
+  } else if (back) {
+    quiz.step = 1;
+    renderQuiz();
+  } else if (reset) {
+    quiz = { step: 1, skin: null, concern: null };
+    renderQuiz();
+  } else if (add) {
+    addToCart(add.dataset.add);
+    add.textContent = "נוסף ✓";
+    const cartLink = $("#quizCartLink");
+    if (cartLink) cartLink.style.display = "inline";
+  }
 });
 
 /* גיפט קארד */
@@ -379,12 +495,19 @@ let gift = CONFIG.giftAmounts[0];
 function renderGift() {
   $("#giftChips").innerHTML = CONFIG.giftAmounts.map((a) =>
     '<button class="chip" type="button" aria-pressed="' + (a === gift) + '" data-g="' + a + '">₪' + a + '</button>').join("");
-  $("#giftBtn").href = "https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent("היי, אשמח לרכוש גיפט קארד בסך ₪" + gift);
+  $("#giftVisualAmount").textContent = "₪" + gift;
+  $("#giftBtn").href = "https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent("היי ספיר, אשמח לרכוש גיפט קארד בסך ₪" + gift);
 }
-$("#giftChips").addEventListener("click", (e) => { if (e.target.dataset.g) { gift = +e.target.dataset.g; renderGift(); } });
-$("#giftBtn").target = "_blank"; $("#giftBtn").rel = "noopener";
+$("#giftChips").addEventListener("click", (e) => {
+  const chip = e.target.closest("[data-g]");
+  if (chip) { gift = +chip.dataset.g; renderGift(); }
+});
+$("#giftBtn").target = "_blank";
+$("#giftBtn").rel = "noopener";
 
-renderQuiz(); renderCart(); renderGift();
+renderQuiz();
+renderCart();
+renderGift();
 </script>
 </body>
 </html>
