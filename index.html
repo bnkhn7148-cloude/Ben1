@@ -18,6 +18,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .wrap{max-width:1184px;margin:0 auto;padding:0 24px}
 section{padding:72px 0}
 .alt{background:var(--bg2)}
+main section+section:not(.alt){border-top:1px solid var(--line)}
 h1,h2,h3{margin:0;font-weight:300;text-wrap:balance}
 h2{font-size:clamp(28px,4vw,38px);margin-bottom:8px}
 .sub{color:var(--mute);font-size:17px;max-width:680px;margin:0 0 32px}
@@ -70,12 +71,12 @@ nav.links a:hover{color:var(--accent)}
 .disc{font-size:13px;color:var(--mute)}
 /* shop */
 .shop{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.prod{background:var(--bg);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.prod{background:var(--bg2);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .prod .ph{height:170px}
 .prod h3{font-size:18px;font-weight:500}
 .prod p{margin:0;font-size:14px;color:var(--mute)}
 .prod .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
-.cart{margin-top:28px;background:var(--bg);border-radius:20px;padding:24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+.cart{margin-top:28px;background:var(--bg2);border-radius:20px;padding:24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
 .cart>div{flex:1 1 300px;min-width:0}
 .cart h3{font-size:22px;font-weight:500;margin-bottom:10px}
 .line{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
@@ -108,14 +109,14 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </style>
 </head>
 <body>
- 
+
 <header>
 <div class="wrap nav">
-<a class="logo" href="#top" id="brandName">[שם העסק]</a>
+<a class="logo" href="#top" id="brandName" dir="ltr">Sapir skincare</a>
 <nav class="links" aria-label="ניווט ראשי">
 <a href="#treatments">טיפולים</a>
-<a href="#quiz">שאלון עור</a>
 <a href="#shop">חנות</a>
+<a href="#quiz">שאלון עור</a>
 <a href="#club">מועדון לקוחות</a>
 <a href="#gift">גיפט קארד</a>
 <a href="#contact">יצירת קשר</a>
@@ -126,11 +127,11 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 </div>
 </header>
- 
+
 <main id="top">
 <div class="wrap hero">
 <div style="display:flex;flex-direction:column;justify-content:center">
-<div class="eyebrow">קוסמטיקה וטיפולי פנים · [עיר]</div>
+<div class="eyebrow">קוסמטיקה וטיפולי פנים</div>
 <h1>עור שמרגיש טוב,<br>בטיפול שמותאם לך.</h1>
 <p>אבחון אישי לפני כל טיפול, חומרים מקצועיים ותוצאה שרואים. טיפולי פנים, מוצרי טיפוח לבית ומועדון לקוחות שמחזיר לך על כל ביקור.</p>
 <div class="row">
@@ -138,9 +139,9 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 <a class="btn" href="#quiz">איזה מוצרים מתאימים לעור שלי?</a>
 </div>
 </div>
-<div><div class="ph" role="img" aria-label="תמונה של הקוסמטיקאית">מקום לתמונה: [צילום בחדר הטיפולים]</div></div>
+<div><div class="ph" style="padding:0"><img src="img/hero.jpg" alt="ספיר מבצעת טיפול פנים בקליניקה" style="object-position:center 30%"></div></div>
 </div>
- 
+
 <section id="treatments" class="alt">
 <div class="wrap">
 <h2>הטיפולים</h2>
@@ -148,19 +149,8 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 <div class="grid cards" id="treatmentList"></div>
 </div>
 </section>
- 
-<section id="quiz">
-<div class="wrap quiz">
-<div>
-<div class="eyebrow">שאלון קצר · 2 שאלות</div>
-<h2 style="margin-top:12px">איזה מוצרים מתאימים לעור שלך?</h2>
-<p class="sub">עונים על שתי שאלות ומקבלים המלצה על מוצרים מהחנות. ההמלצה כללית ולא מחליפה אבחון בקליניקה.</p>
-</div>
-<div class="qbox" id="quizBox" aria-live="polite"></div>
-</div>
-</section>
- 
-<section id="shop" class="alt">
+
+<section id="shop">
 <div class="wrap">
 <h2>חנות המוצרים</h2>
 <p class="sub">משלוח עד הבית דרך חברת שילוח.</p>
@@ -178,7 +168,18 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 </div>
 </section>
- 
+
+<section id="quiz">
+<div class="wrap quiz">
+<div>
+<div class="eyebrow">שאלון קצר · 2 שאלות</div>
+<h2 style="margin-top:12px">איזה מוצרים מתאימים לעור שלך?</h2>
+<p class="sub">עונים על שתי שאלות ומקבלים המלצה על מוצרים מהחנות. ההמלצה כללית ולא מחליפה אבחון בקליניקה.</p>
+</div>
+<div class="qbox" id="quizBox" aria-live="polite"></div>
+</div>
+</section>
+
 <section id="club">
 <div class="wrap">
 <h2>מועדון הלקוחות</h2>
@@ -191,7 +192,7 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 <a class="btn accent" data-link="vibu" href="#">הצטרפות למועדון ב-Vibu</a>
 </div>
 </section>
- 
+
 <section id="gift" class="alt">
 <div class="wrap gift">
 <div><div class="ph" role="img" aria-label="גיפט קארד">תמונה: גיפט קארד</div></div>
@@ -204,12 +205,12 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 </section>
 </main>
- 
+
 <footer id="contact">
 <div class="wrap cols">
 <div>
-<b style="font-size:24px" id="footName">[שם העסק]</b>
-<small>[כתובת הקליניקה]<br>[טלפון]<br>ימים [א׳–ה׳], שעות [__–__]</small>
+<b style="font-size:24px" id="footName" dir="ltr">Sapir skincare</b>
+<small>דניאל 47, בת ים<br><a href="tel:0503568603" dir="ltr">050-3568603</a><br>ימים א׳–ה׳, 09:00–18:00</small>
 </div>
 <div style="font-size:16px">
 <a data-link="instagram" href="#">אינסטגרם</a>
@@ -219,23 +220,23 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 </div>
 </footer>
- 
+
 <script>
 /* ===== הגדרות: כאן מחליפים קישורים ותוכן ===== */
 const CONFIG = {
-  brand: "[שם העסק]",
+  brand: "Sapir skincare",
   links: {
     calmark: "https://CALMARK-LINK-HERE",
     vibu: "https://VIBU-LINK-HERE",
-    instagram: "https://instagram.com/INSTAGRAM-HANDLE",
-    whatsapp: "https://wa.me/972500000000"      // מספר בפורמט בינלאומי, בלי 0 ובלי +
+    instagram: "https://instagram.com/sapir_cohen_skincare",
+    whatsapp: "https://wa.me/972503568603"      // מספר בפורמט בינלאומי, בלי 0 ובלי +
   },
-  whatsappNumber: "972500000000",
+  whatsappNumber: "972503568603",
   shipping: "[חברת המשלוחים]",
   giftAmounts: [150, 250, 400],
   giftPayLink: "https://GIFT-PAYMENT-LINK-HERE"  // קישור תשלום מחברת הסליקה
 };
- 
+
 /* תמונה: שימי נתיב בשדה img, למשל "img/facial.jpg". ריק = מקום לתמונה */
 const TREATMENTS = [
   { name: "ניקוי פנים עמוק", meta: "[60] דק׳ · ₪[__]", desc: "טיפול בסיס לכל סוגי העור. מנקה, מנקז ומרענן.", includes: "אבחון עור, ניקוי, אדים, הוצאת סבומים, מסכה, קרם הגנה.", img: "" },
@@ -243,7 +244,7 @@ const TREATMENTS = [
   { name: "טיפול לעור בעייתי", meta: "[75] דק׳ · ₪[__]", desc: "לאקנה ועור שמן. מפחית דלקות ומאזן ייצור שומן.", includes: "אבחון, ניקוי עמוק, פילינג, טיפול מקומי, מסכה מרגיעה.", img: "" },
   { name: "טיפול אנטי אייג׳ינג", meta: "[75] דק׳ · ₪[__]", desc: "למראה מוצק וחלק יותר, עם דגש על קמטים ופיגמנטציה.", includes: "אבחון, פילינג, סרום פעיל, עיסוי הרמה, מסכה, קרם הגנה.", img: "" }
 ];
- 
+
 /* tags משמשים להתאמה בשאלון: oily, dry, combo, sensitive, acne, pigment, wrinkles, redness, all
    price: מספר בשקלים (0 = יוצג "₪[__]") */
 const PRODUCTS = [
@@ -256,20 +257,20 @@ const PRODUCTS = [
   { id: "night", name: "קרם לילה מזין", desc: "תיקון והזנה בזמן השינה.", price: 0, tags: ["dry", "wrinkles"], img: "" },
   { id: "toner", name: "טונר מאזן", desc: "מכין את העור לשלב הסרום.", price: 0, tags: ["combo", "oily", "acne"], img: "" }
 ];
- 
+
 const SKIN = [["oily","שמן"],["dry","יבש"],["combo","מעורב"],["sensitive","רגיש"]];
 const CONCERN = [["acne","פצעונים"],["pigment","כתמים ופיגמנטציה"],["wrinkles","קמטים וקו עדין"],["redness","אדמומיות"]];
- 
+
 /* ===== קוד ===== */
 const $ = (s) => document.querySelector(s);
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money = (n) => n > 0 ? "₪" + n : "₪[__]";
 const photo = (src, label) => src ? '<div class="ph"><img src="' + esc(src) + '" alt="' + esc(label) + '"></div>' : '<div class="ph">תמונה: ' + esc(label) + '</div>';
- 
+
 document.querySelectorAll("[data-link]").forEach((a) => { a.href = CONFIG.links[a.dataset.link]; a.target = "_blank"; a.rel = "noopener"; });
 $("#brandName").textContent = CONFIG.brand; $("#footName").textContent = CONFIG.brand; $("#shipName").textContent = CONFIG.shipping;
 document.title = CONFIG.brand + " | טיפולי פנים";
- 
+
 /* טיפולים */
 $("#treatmentList").innerHTML = TREATMENTS.map((t) =>
   '<article class="card">' + photo(t.img, t.name) +
@@ -277,16 +278,16 @@ $("#treatmentList").innerHTML = TREATMENTS.map((t) =>
   '<p>' + esc(t.desc) + '</p><div class="inc"><b style="font-weight:500">מה כולל:</b> ' + esc(t.includes) + '</div>' +
   '<a class="btn" data-link="calmark" href="' + esc(CONFIG.links.calmark) + '" target="_blank" rel="noopener">קביעת תור לטיפול</a></article>'
 ).join("");
- 
+
 /* עגלה */
 let cart = {};
 try { cart = JSON.parse(localStorage.getItem("cart") || "{}"); } catch (e) { cart = {}; }
 const saveCart = () => { try { localStorage.setItem("cart", JSON.stringify(cart)); } catch (e) {} };
 const prodById = (id) => PRODUCTS.find((p) => p.id === id);
- 
+
 function addToCart(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); }
 function setQty(id, q) { if (q <= 0) delete cart[id]; else cart[id] = q; saveCart(); renderCart(); }
- 
+
 function renderCart() {
   const ids = Object.keys(cart).filter((id) => prodById(id));
   const count = ids.reduce((n, id) => n + cart[id], 0);
@@ -302,13 +303,13 @@ function renderCart() {
   $("#checkout").disabled = !ids.length;
   $("#checkout").style.opacity = ids.length ? 1 : .5;
 }
- 
+
 $("#cartLines").addEventListener("click", (e) => {
   const inc = e.target.dataset.inc, dec = e.target.dataset.dec;
   if (inc) setQty(inc, (cart[inc] || 0) + 1);
   if (dec) setQty(dec, (cart[dec] || 0) - 1);
 });
- 
+
 $("#checkout").addEventListener("click", () => {
   const ids = Object.keys(cart).filter((id) => prodById(id));
   if (!ids.length) return;
@@ -316,7 +317,7 @@ $("#checkout").addEventListener("click", () => {
   const msg = "היי, אשמח להזמין:\n" + lines + "\n\nאשמח לקבל קישור לתשלום ופרטי משלוח.";
   window.open("https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
 });
- 
+
 /* חנות */
 $("#productList").innerHTML = PRODUCTS.map((p) =>
   '<article class="prod">' + photo(p.img, p.name) + '<h3>' + esc(p.name) + '</h3><p>' + esc(p.desc) + '</p>' +
@@ -324,7 +325,7 @@ $("#productList").innerHTML = PRODUCTS.map((p) =>
   '<button class="btn solid sm" type="button" data-add="' + p.id + '">הוספה</button></div></article>'
 ).join("");
 $("#productList").addEventListener("click", (e) => { if (e.target.dataset.add) addToCart(e.target.dataset.add); });
- 
+
 /* שאלון */
 let quiz = { step: 1, skin: null, concern: null };
 function renderQuiz() {
@@ -353,7 +354,7 @@ $("#quizBox").addEventListener("click", (e) => {
   else if (t.dataset.reset) { quiz = { step: 1, skin: null, concern: null }; renderQuiz(); }
   else if (t.dataset.add) { addToCart(t.dataset.add); t.textContent = "נוסף ✓"; }
 });
- 
+
 /* גיפט קארד */
 let gift = CONFIG.giftAmounts[0];
 function renderGift() {
@@ -362,9 +363,8 @@ function renderGift() {
 }
 $("#giftChips").addEventListener("click", (e) => { if (e.target.dataset.g) { gift = +e.target.dataset.g; renderGift(); } });
 $("#giftBtn").href = CONFIG.giftPayLink; $("#giftBtn").target = "_blank"; $("#giftBtn").rel = "noopener";
- 
+
 renderQuiz(); renderCart(); renderGift();
 </script>
 </body>
 </html>
- 
