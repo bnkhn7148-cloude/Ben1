@@ -1,837 +1,370 @@
-cat > index.html <<'EOF'
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ממלכת ממתקי הגומי – חמוצים, מתוקים וקולה. הגרלת מיקס, בניית שקית אישית ומשחק תפיסה מהנה." />
-  <meta name="theme-color" content="#ff3b8d" />
-  <meta property="og:title" content="ממלכת ממתקי הגומי" />
-  <meta property="og:description" content="כל הצבעים, כל הטעמים והשילובים הכי ממכרים בשקית אחת." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍬</text></svg>" />
-  <title>ממלכת ממתקי הגומי</title>
-  <style>
-    :root {
-      --pink: #ff3b8d;
-      --pink-dark: #c9184a;
-      --yellow: #ffd000;
-      --cyan: #00b4d8;
-      --purple: #7b2cbf;
-      --dark: #1d1528;
-      --muted: #554b63;
-      --bg-soft: #f8f4ff;
-      --radius: 22px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: "Heebo", "Assistant", Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 35%, #ffd000 100%) fixed;
-      color: var(--dark);
-      min-height: 100vh;
-      line-height: 1.55;
-    }
-
-    .skip-link {
-      position: absolute;
-      top: -60px;
-      right: 12px;
-      background: var(--dark);
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 0 0 12px 12px;
-      z-index: 100;
-      text-decoration: none;
-    }
-    .skip-link:focus { top: 0; }
-
-    :focus-visible {
-      outline: 3px solid var(--dark);
-      outline-offset: 3px;
-    }
-
-    /* ניווט */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(29, 21, 40, 0.92);
-      backdrop-filter: blur(8px);
-    }
-    .topbar-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .brand { color: var(--yellow); font-weight: 800; font-size: 1.1rem; text-decoration: none; }
-    .topbar nav { display: flex; gap: 6px; flex-wrap: wrap; }
-    .topbar nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.92rem;
-      padding: 6px 12px;
-      border-radius: 999px;
-      transition: background 0.2s;
-    }
-    .topbar nav a:hover { background: rgba(255, 255, 255, 0.16); }
-
-    .page { padding: 28px 16px 40px; }
-
-    .card {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(29, 21, 40, 0.22);
-    }
-
-    .hero {
-      position: relative;
-      min-height: 220px;
-      background: radial-gradient(circle at 30% 30%, #ff7eb3, #7b2cbf 70%);
-      display: grid;
-      place-items: center;
-    }
-    .hero img {
-      width: 100%;
-      max-height: 380px;
-      object-fit: cover;
-      display: block;
-    }
-    .hero-fallback {
-      font-size: 5rem;
-      letter-spacing: 12px;
-      padding: 40px 0;
-    }
-    .hero-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: var(--yellow);
-      color: var(--dark);
-      font-weight: bold;
-      padding: 8px 16px;
-      border-radius: 999px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      animation: wiggle 3s ease-in-out infinite;
-    }
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0); }
-      50% { transform: rotate(-4deg) scale(1.04); }
-    }
-
-    .content { padding: 32px 32px 36px; }
-
-    h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 5vw, 2.4rem); color: var(--pink); line-height: 1.2; }
-    h2.section-title { margin: 0 0 6px; font-size: 1.5rem; color: var(--purple); }
-    .lead { margin: 0 0 28px; font-size: 1.1rem; color: var(--muted); }
-    .section-sub { margin: 0 0 18px; color: var(--muted); }
-
-    section.block { margin-bottom: 36px; scroll-margin-top: 80px; }
-
-    /* טעמים */
-    .flavors {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .flavor-item {
-      border-radius: 18px;
-      padding: 20px;
-      color: #fff;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .flavor-item:hover { transform: translateY(-5px) rotate(-1deg); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18); }
-    .flavor-item .emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
-    .f-sour { background: linear-gradient(135deg, #00b4d8, #0077b6); }
-    .f-sweet { background: linear-gradient(135deg, #ff3b8d, #c9184a); }
-    .f-cola { background: linear-gradient(135deg, #f77f00, #d62828); }
-    .flavor-item p { margin: 8px 0 0; font-weight: normal; font-size: 0.95rem; }
-
-    /* כפתורים */
-    button, .btn {
-      background: linear-gradient(90deg, var(--pink), var(--purple));
-      color: #fff;
-      border: none;
-      padding: 12px 26px;
-      font-size: 1.05rem;
-      font-family: inherit;
-      font-weight: bold;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    button:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(123, 44, 191, 0.3); }
-    button:active { transform: scale(0.97); }
-    button.ghost {
-      background: transparent;
-      color: #fff;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      padding: 6px 14px;
-      font-size: 0.9rem;
-    }
-    button.ghost:hover { background: rgba(255, 255, 255, 0.15); box-shadow: none; }
-
-    /* מיקס */
-    .mix-box {
-      background: var(--bg-soft);
-      border: 2px dashed var(--purple);
-      border-radius: var(--radius);
-      padding: 24px;
-      text-align: center;
-    }
-    #mix-result {
-      margin-top: 16px;
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: var(--purple);
-      min-height: 56px;
-    }
-    #mix-result .mix-emojis { display: block; font-size: 2.2rem; margin-bottom: 4px; }
-    .mix-pop { animation: pop 0.4s ease; }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      70% { transform: scale(1.06); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* בנה שקית */
-    .builder {
-      border: 2px solid #eadcff;
-      border-radius: var(--radius);
-      padding: 20px;
-    }
-    .builder-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
-    .builder-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      background: var(--bg-soft);
-      border-radius: 14px;
-      padding: 10px 14px;
-    }
-    .builder-row .name { font-weight: bold; }
-    .qty { display: flex; align-items: center; gap: 8px; }
-    .qty button {
-      width: 34px;
-      height: 34px;
-      padding: 0;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      line-height: 1;
-    }
-    .qty output { min-width: 22px; text-align: center; font-weight: bold; }
-    .builder-footer {
-      margin-top: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .bag-total { font-weight: bold; color: var(--purple); }
-    .bag-meter { flex: 1 1 200px; height: 14px; background: #eadcff; border-radius: 999px; overflow: hidden; }
-    .bag-meter span {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, var(--yellow), var(--pink));
-      transition: width 0.3s ease;
-    }
-    .bag-message { margin: 10px 0 0; color: var(--muted); min-height: 24px; }
-
-    /* משחק */
-    .game-section {
-      background: linear-gradient(180deg, #1d1528 0%, #2d1e40 100%);
-      border-radius: 24px;
-      padding: 22px;
-      color: #fff;
-      text-align: center;
-      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.35);
-    }
-    .game-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .game-title { font-size: 1.35rem; font-weight: bold; color: var(--yellow); margin: 0; }
-    .game-stats { display: flex; gap: 8px; flex-wrap: wrap; font-weight: bold; font-size: 0.95rem; }
-    .stat-pill { background: rgba(255, 255, 255, 0.12); padding: 6px 14px; border-radius: 999px; }
-
-    .canvas-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 680px;
-      aspect-ratio: 680 / 400;
-      margin: 0 auto;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 3px solid var(--pink);
-      background: radial-gradient(circle at top, #382352, #181022);
-      touch-action: none;
-      user-select: none;
-    }
-    canvas { display: block; width: 100%; height: 100%; cursor: ew-resize; }
-
-    .game-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(24, 16, 34, 0.84);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      gap: 12px;
-    }
-    .game-overlay.hidden { display: none; }
-    .game-overlay h3 { margin: 0; font-size: 1.7rem; color: var(--yellow); }
-    .game-overlay p { margin: 0; font-size: 1rem; color: #e2d9f3; max-width: 440px; }
-
-    .game-tools { margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-    .game-hint { margin-top: 10px; font-size: 0.85rem; color: #cbbbe2; }
-
-    footer {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 0.85rem;
-      color: #7c728a;
-    }
-
-    @media (max-width: 560px) {
-      .content { padding: 22px 16px 28px; }
-      .topbar nav a { padding: 6px 8px; font-size: 0.85rem; }
-      .brand { display: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      html { scroll-behavior: auto; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[שם העסק] | טיפולי פנים</title>
+<meta name="description" content="טיפולי פנים מותאמים אישית, מוצרי טיפוח, מועדון לקוחות וגיפט קארד.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap">
+<style>
+:root{--bg:#F3F5F2;--bg2:#E8EEE9;--ph:#CFDCD4;--ink:#14282A;--mute:#3C514F;--line:#D9DFDA;--accent:#B5586C}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1184px;margin:0 auto;padding:0 24px}
+section{padding:72px 0}
+.alt{background:var(--bg2)}
+h1,h2,h3{margin:0;font-weight:300;text-wrap:balance}
+h2{font-size:clamp(28px,4vw,38px);margin-bottom:8px}
+.sub{color:var(--mute);font-size:17px;max-width:680px;margin:0 0 32px}
+.eyebrow{font-size:14px;letter-spacing:1px;color:var(--accent);font-weight:500}
+.btn{display:inline-block;text-decoration:none;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:16px;padding:13px 26px;border-radius:999px}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn.sm{font-size:14px;padding:9px 18px}
+.grid{display:grid;gap:20px}
+.ph{background:var(--ph);border-radius:12px;display:flex;align-items:flex-end;padding:10px;font-size:13px;color:var(--mute);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+/* nav */
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
+.logo{font-size:22px;font-weight:700;text-decoration:none}
+nav.links{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:16px}
+nav.links a{text-decoration:none}
+nav.links a:hover{color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+/* hero */
+.hero{display:flex;flex-wrap:wrap;gap:48px;align-items:stretch;padding-block:64px}
+.hero>div{flex:1 1 380px;min-width:0}
+.hero h1{font-size:clamp(36px,6vw,60px);line-height:1.1;margin:16px 0 20px}
+.hero p{font-size:19px;color:var(--mute);max-width:520px;margin:0 0 28px}
+.hero .ph{min-height:420px;border-radius:24px;padding:20px;height:100%}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+/* cards */
+.cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--bg);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card .ph{height:150px}
+.card .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.card h3{font-size:22px;font-weight:500}
+.card .meta{white-space:nowrap;color:var(--mute);font-size:15px}
+.card p{margin:0;color:var(--mute)}
+.card .inc{font-size:14px}
+.card .btn{margin-top:auto;text-align:center}
+/* quiz */
+.quiz{display:flex;flex-wrap:wrap;gap:48px}
+.quiz>div{flex:1 1 360px;min-width:0}
+.qbox{background:var(--bg2);border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:18px}
+.qbox .step{font-size:14px;color:var(--mute)}
+.qbox .q{font-size:22px;font-weight:500}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.opt{text-align:right;padding:16px;border-radius:14px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);font-size:16px;min-height:56px}
+.opt:hover{background:#fff}
+.link{background:none;border:none;color:var(--mute);text-decoration:underline;font-size:15px;padding:8px 0;align-self:flex-start}
+.rec{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--bg);border-radius:14px;padding:14px 16px}
+.rec b{font-weight:500;font-size:17px}
+.rec small{display:block;color:var(--mute);font-size:14px}
+.disc{font-size:13px;color:var(--mute)}
+/* shop */
+.shop{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.prod{background:var(--bg);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.prod .ph{height:170px}
+.prod h3{font-size:18px;font-weight:500}
+.prod p{margin:0;font-size:14px;color:var(--mute)}
+.prod .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.cart{margin-top:28px;background:var(--bg);border-radius:20px;padding:24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+.cart>div{flex:1 1 300px;min-width:0}
+.cart h3{font-size:22px;font-weight:500;margin-bottom:10px}
+.line{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:18px;line-height:1}
+.note{font-size:14px;color:var(--mute)}
+/* club */
+.perks{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-bottom:28px}
+.perk{background:var(--bg2);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:8px}
+.perk.dark{background:var(--ink);color:var(--bg)}
+.perk .big{font-size:44px;font-weight:300}
+.perk b{font-size:19px;font-weight:500}
+.perk span{font-size:15px;color:var(--mute)}
+.perk.dark span{color:#C9D6CE}
+/* gift */
+.gift{display:flex;flex-wrap:wrap;gap:48px;align-items:center}
+.gift>div{flex:1 1 360px;min-width:0}
+.gift .ph{min-height:260px;border-radius:24px;padding:20px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px}
+.chip{padding:11px 20px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:16px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+/* footer */
+footer{background:var(--ink);color:var(--bg);padding:56px 0}
+footer .cols{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between}
+footer .cols>div{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:8px}
+footer a{color:var(--bg)}
+footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (max-width:560px){.wrap{padding:0 16px}section{padding:48px 0}.qbox{padding:20px}}
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#main">דלג לתוכן</a>
-
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="brand" href="#top">🍬 ממלכת הגומי</a>
-      <nav aria-label="ניווט ראשי">
-        <a href="#flavors">טעמים</a>
-        <a href="#mix">מיקס</a>
-        <a href="#bag">בנה שקית</a>
-        <a href="#game">משחק</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="page" id="top">
-    <main class="card" id="main">
-      <div class="hero">
-        <img src="orange.png" alt="ממתקי גומי צבעוניים" loading="eager"
-             onerror="this.remove(); document.getElementById('heroFallback').hidden = false;" />
-        <div class="hero-fallback" id="heroFallback" hidden aria-hidden="true">🍓🐻🍒🍋</div>
-        <span class="hero-badge">100% מתוק וחמוץ</span>
-      </div>
-
-      <div class="content">
-        <h1>ברוכים הבאים לממלכת הגומי</h1>
-        <p class="lead">כל הצבעים, כל הטעמים והשילובים הכי ממכרים בשקית אחת.</p>
-
-        <section class="block" id="flavors" aria-labelledby="flavors-title">
-          <h2 class="section-title" id="flavors-title">הטעמים שלנו</h2>
-          <p class="section-sub">שלוש משפחות, אינסוף דרכים להתמכר.</p>
-          <div class="flavors">
-            <div class="flavor-item f-sour">
-              <span class="emoji" aria-hidden="true">🍋</span>
-              חמוצים בטירוף
-              <p>חגורות סוכר, תולעים חמוצות ופירות הדר שעושים צמרמורת טובה.</p>
-            </div>
-            <div class="flavor-item f-sweet">
-              <span class="emoji" aria-hidden="true">🐻</span>
-              קלאסיים מתוקים
-              <p>דובונים, תותים, דובדבנים ולבבות רכים שאי אפשר להפסיק לאכול.</p>
-            </div>
-            <div class="flavor-item f-cola">
-              <span class="emoji" aria-hidden="true">🥤</span>
-              קולה ואנרגיה
-              <p>בקבוקי קולה תוססים ושילובים מיוחדים לחובבי הטעמים החזקים.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="block" id="mix" aria-labelledby="mix-title">
-          <h2 class="section-title" id="mix-title">הגרלת מיקס</h2>
-          <div class="mix-box">
-            <button type="button" id="mixBtn">הגרל לי מיקס גומי להיום</button>
-            <div id="mix-result" aria-live="polite">לחץ על הכפתור כדי לקבל המלצה לשקית הבאה שלך!</div>
-          </div>
-        </section>
-
-        <section class="block" id="bag" aria-labelledby="bag-title">
-          <h2 class="section-title" id="bag-title">בנה את השקית שלך</h2>
-          <p class="section-sub">בחר כמה מכל סוג. השקית מכילה עד 12 יחידות.</p>
-          <div class="builder">
-            <div class="builder-list" id="builderList"></div>
-            <div class="builder-footer">
-              <span class="bag-total">בשקית: <span id="bagCount">0</span> / 12</span>
-              <div class="bag-meter" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="bagMeter" aria-label="מילוי השקית">
-                <span id="bagMeterFill"></span>
-              </div>
-              <button type="button" id="bagReset" class="ghost" style="background:#7b2cbf;border-color:#7b2cbf">נקה שקית</button>
-            </div>
-            <p class="bag-message" id="bagMessage" aria-live="polite"></p>
-          </div>
-        </section>
-
-        <section class="block" id="game" aria-labelledby="game-title">
-          <div class="game-section">
-            <div class="game-header">
-              <h2 class="game-title" id="game-title">משחק: תפוס את הגומי!</h2>
-              <div class="game-stats">
-                <span class="stat-pill">ניקוד: <span id="score">0</span></span>
-                <span class="stat-pill">שיא: <span id="high-score">0</span></span>
-                <span class="stat-pill">שלב: <span id="level">1</span></span>
-                <span class="stat-pill"><span id="lives" aria-label="חיים">❤️❤️❤️</span></span>
-              </div>
-            </div>
-
-            <div class="canvas-wrapper">
-              <canvas id="candyCanvas" width="680" height="400" aria-label="אזור המשחק" role="img"></canvas>
-              <div class="game-overlay" id="gameOverlay">
-                <h3 id="overlayTitle">מוכנים למלא את השקית?</h3>
-                <p id="overlayDesc">תפסו כמה שיותר ממתקי גומי (🍓 🐻 🍒 🍋 ⭐) והתרחקו מהפלפל החריף (🌶️)! רצף תפיסות נותן בונוס.</p>
-                <button type="button" id="startBtn">התחל משחק</button>
-              </div>
-            </div>
-
-            <div class="game-tools">
-              <button type="button" class="ghost" id="pauseBtn">⏸ השהה</button>
-              <button type="button" class="ghost" id="soundBtn" aria-pressed="true">🔊 צליל פעיל</button>
-            </div>
-            <div class="game-hint">שליטה: עכבר, גרירה באצבע, או חצים ⬅️ ➡️ · רווח או P להשהיה</div>
-          </div>
-        </section>
-
-        <footer>© ממלכת ממתקי הגומי · נבנה באהבה (ובהרבה סוכר)</footer>
-      </div>
-    </main>
-  </div>
-
-  <script>
-    "use strict";
-
-    /* ---------- הגרלת מיקס ---------- */
-    const mixes = [
-      { text: "דובוני פירות + חגורות תות חמוצות", emojis: "🐻🍓" },
-      { text: "בקבוקי קולה + תולעים צבעוניות", emojis: "🥤🪱" },
-      { text: "תותים ענקיים + בננות קצף קלאסיות", emojis: "🍓🍌" },
-      { text: "מיקס סופר-חמוץ: לימון, תפוח ירוק ואבטיח", emojis: "🍋🍏🍉" },
-      { text: "לבבות רכים + דובדבנים מסוכרים", emojis: "💗🍒" },
-      { text: "טבעות אננס + דובוני קולה", emojis: "🍍🥤" }
-    ];
-    let lastMixIndex = -1;
-    const mixResult = document.getElementById("mix-result");
-
-    function pickMix() {
-      let i;
-      do { i = Math.floor(Math.random() * mixes.length); } while (i === lastMixIndex && mixes.length > 1);
-      lastMixIndex = i;
-      const m = mixes[i];
-      mixResult.innerHTML = "";
-      const wrap = document.createElement("span");
-      wrap.className = "mix-pop";
-      const em = document.createElement("span");
-      em.className = "mix-emojis";
-      em.textContent = m.emojis;
-      wrap.append(em, document.createTextNode("המיקס שלך: " + m.text));
-      mixResult.appendChild(wrap);
-    }
-    document.getElementById("mixBtn").addEventListener("click", pickMix);
-
-    /* ---------- בנה שקית ---------- */
-    const BAG_MAX = 12;
-    const bagTypes = [
-      { id: "bears", name: "🐻 דובונים" },
-      { id: "worms", name: "🪱 תולעים חמוצות" },
-      { id: "cola", name: "🥤 בקבוקי קולה" },
-      { id: "straps", name: "🍓 חגורות תות" },
-      { id: "rings", name: "🍍 טבעות אננס" },
-      { id: "hearts", name: "💗 לבבות" }
-    ];
-    const bag = {};
-    bagTypes.forEach(t => bag[t.id] = 0);
-    const builderList = document.getElementById("builderList");
-    const bagCountEl = document.getElementById("bagCount");
-    const bagMeter = document.getElementById("bagMeter");
-    const bagFill = document.getElementById("bagMeterFill");
-    const bagMsg = document.getElementById("bagMessage");
-
-    function bagTotal() { return Object.values(bag).reduce((a, b) => a + b, 0); }
-
-    function renderBag() {
-      const total = bagTotal();
-      bagTypes.forEach(t => {
-        document.getElementById("qty-" + t.id).textContent = bag[t.id];
-      });
-      bagCountEl.textContent = total;
-      bagMeter.setAttribute("aria-valuenow", total);
-      bagFill.style.width = (total / BAG_MAX * 100) + "%";
-      if (total === 0) bagMsg.textContent = "";
-      else if (total < BAG_MAX) bagMsg.textContent = `עוד ${BAG_MAX - total} ממתקים והשקית מלאה.`;
-      else bagMsg.textContent = "🎉 השקית מלאה ומוכנה! תהנו.";
-    }
-
-    bagTypes.forEach(t => {
-      const row = document.createElement("div");
-      row.className = "builder-row";
-      row.innerHTML = `
-        <span class="name">${t.name}</span>
-        <span class="qty">
-          <button type="button" aria-label="הוסף ${t.name}" data-act="add" data-id="${t.id}">+</button>
-          <output id="qty-${t.id}">0</output>
-          <button type="button" aria-label="הסר ${t.name}" data-act="sub" data-id="${t.id}">−</button>
-        </span>`;
-      builderList.appendChild(row);
-    });
-    builderList.addEventListener("click", e => {
-      const b = e.target.closest("button[data-act]");
-      if (!b) return;
-      const id = b.dataset.id;
-      if (b.dataset.act === "add" && bagTotal() < BAG_MAX) bag[id]++;
-      if (b.dataset.act === "sub" && bag[id] > 0) bag[id]--;
-      renderBag();
-    });
-    document.getElementById("bagReset").addEventListener("click", () => {
-      bagTypes.forEach(t => bag[t.id] = 0);
-      renderBag();
-    });
-    renderBag();
-
-    /* ---------- המשחק ---------- */
-    const canvas = document.getElementById("candyCanvas");
-    const ctx = canvas.getContext("2d");
-    const W = canvas.width, H = canvas.height;
-    const overlay = document.getElementById("gameOverlay");
-    const overlayTitle = document.getElementById("overlayTitle");
-    const overlayDesc = document.getElementById("overlayDesc");
-    const startBtn = document.getElementById("startBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const soundBtn = document.getElementById("soundBtn");
-    const scoreEl = document.getElementById("score");
-    const highScoreEl = document.getElementById("high-score");
-    const levelEl = document.getElementById("level");
-    const livesEl = document.getElementById("lives");
-
-    function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-    function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
-
-    let score = 0;
-    let highScore = Number(safeGet("gummyHighScore") || 0);
-    highScoreEl.textContent = highScore;
-    let lives = 3;
-    let level = 1;
-    let combo = 0;
-    let running = false;
-    let paused = false;
-    let items = [];
-    let particles = [];
-    let spawnTimer = 0;
-    let lastTime = 0;
-    let rafId = 0;
-    let soundOn = true;
-
-    const player = { x: W / 2 - 48, y: H - 56, w: 96, h: 40, speed: 8 };
-    const keys = { left: false, right: false };
-
-    const candyTypes = [
-      { emoji: "🍓", points: 10, bad: false, weight: 4 },
-      { emoji: "🐻", points: 15, bad: false, weight: 4 },
-      { emoji: "🍒", points: 10, bad: false, weight: 4 },
-      { emoji: "🍋", points: 20, bad: false, weight: 3 },
-      { emoji: "⭐", points: 35, bad: false, weight: 1 },
-      { emoji: "🌶️", points: 0, bad: true, weight: 3 }
-    ];
-    const totalWeight = candyTypes.reduce((a, c) => a + c.weight, 0);
-
-    function randomType() {
-      let r = Math.random() * totalWeight;
-      for (const t of candyTypes) { r -= t.weight; if (r <= 0) return t; }
-      return candyTypes[0];
-    }
-
-    /* צליל פשוט עם WebAudio, בלי קבצים חיצוניים */
-    let audioCtx = null;
-    function beep(freq, dur, type = "sine", vol = 0.06) {
-      if (!soundOn) return;
-      try {
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.type = type;
-        o.frequency.value = freq;
-        g.gain.value = vol;
-        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-        o.connect(g); g.connect(audioCtx.destination);
-        o.start(); o.stop(audioCtx.currentTime + dur);
-      } catch (e) { /* ignore */ }
-    }
-
-    function updateLivesUI() {
-      livesEl.textContent = lives > 0 ? "❤️".repeat(lives) : "💔";
-    }
-
-    function resetState() {
-      score = 0; lives = 3; level = 1; combo = 0;
-      items = []; particles = []; spawnTimer = 0;
-      player.x = W / 2 - player.w / 2;
-      scoreEl.textContent = "0";
-      levelEl.textContent = "1";
-      updateLivesUI();
-    }
-
-    function startGame() {
-      resetState();
-      overlay.classList.add("hidden");
-      running = true;
-      paused = false;
-      pauseBtn.textContent = "⏸ השהה";
-      lastTime = performance.now();
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(loop);
-    }
-
-    function setPaused(p) {
-      if (!running) return;
-      paused = p;
-      if (paused) {
-        overlayTitle.textContent = "בהשהיה";
-        overlayDesc.textContent = "לחצו המשך כדי לחזור למשחק.";
-        startBtn.textContent = "המשך";
-        overlay.classList.remove("hidden");
-        pauseBtn.textContent = "▶ המשך";
-      } else {
-        overlay.classList.add("hidden");
-        pauseBtn.textContent = "⏸ השהה";
-        lastTime = performance.now();
-        rafId = requestAnimationFrame(loop);
-      }
-    }
-
-    function gameOver() {
-      running = false;
-      let newRecord = false;
-      if (score > highScore) {
-        highScore = score;
-        safeSet("gummyHighScore", String(highScore));
-        highScoreEl.textContent = highScore;
-        newRecord = true;
-      }
-      beep(180, 0.5, "sawtooth", 0.07);
-      overlayTitle.textContent = newRecord ? "🏆 שיא חדש!" : "המשחק נגמר!";
-      overlayDesc.textContent = `אספת ${score} נקודות ועלית עד שלב ${level}. רוצה לנסות לשבור את השיא?`;
-      startBtn.textContent = "שחק שוב";
-      overlay.classList.remove("hidden");
-      startBtn.focus();
-    }
-
-    function spawnItem() {
-      const t = randomType();
-      const speedBoost = Math.min((level - 1) * 0.5, 3.5);
-      items.push({
-        x: 26 + Math.random() * (W - 52),
-        y: -25,
-        vy: 2.2 + Math.random() * 1.6 + speedBoost,
-        wobble: Math.random() * Math.PI * 2,
-        ...t
-      });
-    }
-
-    function pop(x, y, text, color) {
-      particles.push({ x, y, text, color, alpha: 1, vy: -1.4 });
-    }
-
-    function roundedRect(x, y, w, h, r) {
-      ctx.beginPath();
-      if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
-      ctx.moveTo(x + r, y);
-      ctx.arcTo(x + w, y, x + w, y + h, r);
-      ctx.arcTo(x + w, y + h, x, y + h, r);
-      ctx.arcTo(x, y + h, x, y, r);
-      ctx.arcTo(x, y, x + w, y, r);
-      ctx.closePath();
-    }
-
-    function drawPlayer() {
-      ctx.save();
-      const grad = ctx.createLinearGradient(player.x, player.y, player.x + player.w, player.y + player.h);
-      grad.addColorStop(0, "#ff3b8d");
-      grad.addColorStop(1, "#7b2cbf");
-      ctx.fillStyle = grad;
-      roundedRect(player.x, player.y, player.w, player.h, 12);
-      ctx.fill();
-      ctx.fillStyle = "#ffd000";
-      ctx.fillRect(player.x + 6, player.y + 4, player.w - 12, 5);
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 14px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "alphabetic";
-      ctx.fillText("שקית גומי", player.x + player.w / 2, player.y + 27);
-      ctx.restore();
-    }
-
-    function drawStars() {
-      ctx.save();
-      ctx.fillStyle = "rgba(255,255,255,0.08)";
-      for (let i = 0; i < 24; i++) {
-        const sx = (i * 97) % W;
-        const sy = (i * 53 + performance.now() / 60 * (1 + (i % 3))) % H;
-        ctx.fillRect(sx, sy, 2, 2);
-      }
-      ctx.restore();
-    }
-
-    function loop(now) {
-      if (!running || paused) return;
-      const dt = Math.min((now - lastTime) / 16.67, 2);
-      lastTime = now;
-
-      ctx.clearRect(0, 0, W, H);
-      drawStars();
-
-      if (keys.left) player.x -= player.speed * dt;
-      if (keys.right) player.x += player.speed * dt;
-      player.x = Math.max(4, Math.min(W - player.w - 4, player.x));
-
-      spawnTimer += dt;
-      const interval = Math.max(20, 52 - (level - 1) * 4);
-      if (spawnTimer >= interval) { spawnItem(); spawnTimer = 0; }
-
-      ctx.font = "28px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      for (let i = items.length - 1; i >= 0; i--) {
-        const it = items[i];
-        it.y += it.vy * dt;
-        it.wobble += 0.06 * dt;
-        const drawX = it.x + Math.sin(it.wobble) * 3;
-        ctx.fillText(it.emoji, drawX, it.y);
-
-        const hitX = it.x > player.x - 10 && it.x < player.x + player.w + 10;
-        const hitY = it.y + 12 >= player.y && it.y - 12 <= player.y + player.h;
-
-        if (hitX && hitY) {
-          items.splice(i, 1);
-          if (it.bad) {
-            lives--;
-            combo = 0;
-            updateLivesUI();
-            pop(it.x, player.y - 10, "חריף! -1❤️", "#ff595e");
-            beep(140, 0.25, "square", 0.05);
-            if (lives <= 0) { gameOver(); return; }
-          } else {
-            combo++;
-            const bonus = combo >= 5 ? Math.floor(combo / 5) * 5 : 0;
-            const gained = it.points + bonus;
-            score += gained;
-            scoreEl.textContent = score;
-            pop(it.x, player.y - 10, bonus ? `+${gained} (רצף ${combo})` : `+${gained}`, "#ffd000");
-            beep(520 + Math.min(combo, 10) * 40, 0.12, "triangle");
-            const newLevel = 1 + Math.floor(score / 150);
-            if (newLevel !== level) {
-              level = newLevel;
-              levelEl.textContent = level;
-              pop(W / 2, H / 2, `שלב ${level}!`, "#00d2ff");
-              beep(880, 0.3, "triangle", 0.07);
-            }
-          }
-          continue;
-        }
-
-        if (it.y > H + 30) {
-          // ממתק טוב שהוחמץ שובר רצף
-          if (!it.bad) combo = 0;
-          items.splice(i, 1);
-        }
-      }
-
-      drawPlayer();
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.y += p.vy * dt;
-        p.alpha -= 0.02 * dt;
-        if (p.alpha <= 0) { particles.splice(i, 1); continue; }
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.font = "bold 18px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(p.text, p.x, p.y);
-        ctx.restore();
-      }
-
-      rafId = requestAnimationFrame(loop);
-    }
-
-    /* שליטה */
-    function moveToClientX(clientX) {
-      const rect = canvas.getBoundingClientRect();
-      const x = (clientX - rect.left) * (W / rect.width);
-      player.x = Math.max(4, Math.min(W - player.w - 4, x - player.w / 2));
-    }
-    canvas.addEventListener("mousemove", e => { if (running && !paused) moveToClientX(e.clientX); });
-    canvas.addEventListener("touchmove", e => {
-      if (e.touches.length) moveToClientX(e.touches[0].clientX);
-    }, { passive: true });
-
-    window.addEventListener("keydown", e => {
-      const k = e.key;
-      if (k === "ArrowLeft") { keys.left = true; if (running) e.preventDefault(); }
-      else if (k === "ArrowRight") { keys.right = true; if (running) e.preventDefault(); }
-      else if ((k === "p" || k === "P" || k === "Escape") && running) { setPaused(!paused); }
-      else if (k === " " && running && document.activeElement === document.body) { e.preventDefault(); setPaused(!paused); }
-    });
-    window.addEventListener("keyup", e => {
-      if (e.key === "ArrowLeft") keys.left = false;
-      if (e.key === "ArrowRight") keys.right = false;
-    });
-
-    startBtn.addEventListener("click", () => {
-      if (running && paused) setPaused(false);
-      else startGame();
-    });
-    pauseBtn.addEventListener("click", () => setPaused(!paused));
-    soundBtn.addEventListener("click", () => {
-      soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 צליל פעיל" : "🔇 צליל כבוי";
-      soundBtn.setAttribute("aria-pressed", String(soundOn));
-    });
-
-    // השהיה אוטומטית כשעוברים לטאב אחר
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && running && !paused) setPaused(true);
-    });
-
-    // ציור ראשוני של השקית ברקע ההתחלה
-    drawPlayer();
-  </script>
+ 
+<header>
+<div class="wrap nav">
+<a class="logo" href="#top" id="brandName">[שם העסק]</a>
+<nav class="links" aria-label="ניווט ראשי">
+<a href="#treatments">טיפולים</a>
+<a href="#quiz">שאלון עור</a>
+<a href="#shop">חנות</a>
+<a href="#club">מועדון לקוחות</a>
+<a href="#gift">גיפט קארד</a>
+<a href="#contact">יצירת קשר</a>
+</nav>
+<div class="nav-actions">
+<a class="btn sm" href="#cart">עגלה (<span id="cartCount">0</span>)</a>
+<a class="btn sm solid" data-link="calmark" href="#">קביעת תור</a>
+</div>
+</div>
+</header>
+ 
+<main id="top">
+<div class="wrap hero">
+<div style="display:flex;flex-direction:column;justify-content:center">
+<div class="eyebrow">קוסמטיקה וטיפולי פנים · [עיר]</div>
+<h1>עור שמרגיש טוב,<br>בטיפול שמותאם לך.</h1>
+<p>אבחון אישי לפני כל טיפול, חומרים מקצועיים ותוצאה שרואים. טיפולי פנים, מוצרי טיפוח לבית ומועדון לקוחות שמחזיר לך על כל ביקור.</p>
+<div class="row">
+<a class="btn accent" data-link="calmark" href="#">קביעת תור</a>
+<a class="btn" href="#quiz">איזה מוצרים מתאימים לעור שלי?</a>
+</div>
+</div>
+<div><div class="ph" role="img" aria-label="תמונה של הקוסמטיקאית">מקום לתמונה: [צילום בחדר הטיפולים]</div></div>
+</div>
+ 
+<section id="treatments" class="alt">
+<div class="wrap">
+<h2>הטיפולים</h2>
+<p class="sub">בחרי טיפול וקבעי תור ישירות ביומן.</p>
+<div class="grid cards" id="treatmentList"></div>
+</div>
+</section>
+ 
+<section id="quiz">
+<div class="wrap quiz">
+<div>
+<div class="eyebrow">שאלון קצר · 2 שאלות</div>
+<h2 style="margin-top:12px">איזה מוצרים מתאימים לעור שלך?</h2>
+<p class="sub">עונים על שתי שאלות ומקבלים המלצה על מוצרים מהחנות. ההמלצה כללית ולא מחליפה אבחון בקליניקה.</p>
+</div>
+<div class="qbox" id="quizBox" aria-live="polite"></div>
+</div>
+</section>
+ 
+<section id="shop" class="alt">
+<div class="wrap">
+<h2>חנות המוצרים</h2>
+<p class="sub">משלוח עד הבית דרך חברת שילוח.</p>
+<div class="grid shop" id="productList"></div>
+<div class="cart" id="cart">
+<div>
+<h3>העגלה שלך</h3>
+<div id="cartLines"></div>
+</div>
+<div style="max-width:360px">
+<p class="note">משלוח: <span id="shipName">[חברת המשלוחים]</span>. הזמנה נשלחת בוואטסאפ, ותקבלי קישור תשלום מאובטח באשראי.</p>
+<p style="font-weight:500;font-size:18px;margin:8px 0">סה״כ: <span id="cartTotal">₪0</span></p>
+<button class="btn accent" id="checkout" type="button">שליחת הזמנה בוואטסאפ</button>
+</div>
+</div>
+</div>
+</section>
+ 
+<section id="club">
+<div class="wrap">
+<h2>מועדון הלקוחות</h2>
+<p class="sub">המועדון פועל דרך Vibu. ההצטרפות ומעקב הכרטיסייה נעשים שם.</p>
+<div class="grid perks">
+<div class="perk dark"><div class="big">7 + 1</div><b>הטיפול השמיני במתנה</b><span>כרטיסייה דיגיטלית. אחרי 7 טיפולים מקבלים טיפול בחינם.</span></div>
+<div class="perk"><div class="big">10%</div><b>הנחה ביום ההולדת</b><span>הנחה על טיפולים נשלחת אוטומטית.</span></div>
+<div class="perk"><div class="big" aria-hidden="true">·))</div><b>הודעה כשאת בסביבה</b><span>התראה ללקוחות שעוברות ליד העסק, עם הטבה מיוחדת.</span></div>
+</div>
+<a class="btn accent" data-link="vibu" href="#">הצטרפות למועדון ב-Vibu</a>
+</div>
+</section>
+ 
+<section id="gift" class="alt">
+<div class="wrap gift">
+<div><div class="ph" role="img" aria-label="גיפט קארד">תמונה: גיפט קארד</div></div>
+<div>
+<h2>גיפט קארד</h2>
+<p class="sub" style="margin-bottom:0">מתנה לטיפול או לסכום חופשי. נשלח במייל או בהודעה, ומומש בקביעת תור או ברכישת מוצרים.</p>
+<div class="chips" id="giftChips" role="group" aria-label="בחירת סכום"></div>
+<a class="btn solid" id="giftBtn" href="#">רכישת גיפט קארד</a>
+</div>
+</div>
+</section>
+</main>
+ 
+<footer id="contact">
+<div class="wrap cols">
+<div>
+<b style="font-size:24px" id="footName">[שם העסק]</b>
+<small>[כתובת הקליניקה]<br>[טלפון]<br>ימים [א׳–ה׳], שעות [__–__]</small>
+</div>
+<div style="font-size:16px">
+<a data-link="instagram" href="#">אינסטגרם</a>
+<a data-link="calmark" href="#">קביעת תור בקלמרק</a>
+<a data-link="vibu" href="#">מועדון לקוחות Vibu</a>
+<a data-link="whatsapp" href="#">וואטסאפ</a>
+</div>
+</div>
+</footer>
+ 
+<script>
+/* ===== הגדרות: כאן מחליפים קישורים ותוכן ===== */
+const CONFIG = {
+  brand: "[שם העסק]",
+  links: {
+    calmark: "https://CALMARK-LINK-HERE",
+    vibu: "https://VIBU-LINK-HERE",
+    instagram: "https://instagram.com/INSTAGRAM-HANDLE",
+    whatsapp: "https://wa.me/972500000000"      // מספר בפורמט בינלאומי, בלי 0 ובלי +
+  },
+  whatsappNumber: "972500000000",
+  shipping: "[חברת המשלוחים]",
+  giftAmounts: [150, 250, 400],
+  giftPayLink: "https://GIFT-PAYMENT-LINK-HERE"  // קישור תשלום מחברת הסליקה
+};
+ 
+/* תמונה: שימי נתיב בשדה img, למשל "img/facial.jpg". ריק = מקום לתמונה */
+const TREATMENTS = [
+  { name: "ניקוי פנים עמוק", meta: "[60] דק׳ · ₪[__]", desc: "טיפול בסיס לכל סוגי העור. מנקה, מנקז ומרענן.", includes: "אבחון עור, ניקוי, אדים, הוצאת סבומים, מסכה, קרם הגנה.", img: "" },
+  { name: "טיפול הידרציה", meta: "[60] דק׳ · ₪[__]", desc: "לעור יבש ועייף. מחזיר לחות ורעננות.", includes: "אבחון, פילינג עדין, סרום היאלורוני, עיסוי פנים, מסכה.", img: "" },
+  { name: "טיפול לעור בעייתי", meta: "[75] דק׳ · ₪[__]", desc: "לאקנה ועור שמן. מפחית דלקות ומאזן ייצור שומן.", includes: "אבחון, ניקוי עמוק, פילינג, טיפול מקומי, מסכה מרגיעה.", img: "" },
+  { name: "טיפול אנטי אייג׳ינג", meta: "[75] דק׳ · ₪[__]", desc: "למראה מוצק וחלק יותר, עם דגש על קמטים ופיגמנטציה.", includes: "אבחון, פילינג, סרום פעיל, עיסוי הרמה, מסכה, קרם הגנה.", img: "" }
+];
+ 
+/* tags משמשים להתאמה בשאלון: oily, dry, combo, sensitive, acne, pigment, wrinkles, redness, all
+   price: מספר בשקלים (0 = יוצג "₪[__]") */
+const PRODUCTS = [
+  { id: "cleanser", name: "ג׳ל ניקוי עדין", desc: "ניקוי יומי שלא מייבש. מתאים לרוב סוגי העור.", price: 0, tags: ["all"], img: "" },
+  { id: "serum-hydra", name: "סרום לחות", desc: "חומצה היאלורונית לשכבת לחות עמוקה.", price: 0, tags: ["dry", "wrinkles"], img: "" },
+  { id: "spf", name: "קרם הגנה SPF 50", desc: "הגנה יומית מהשמש, מרקם קליל.", price: 0, tags: ["all", "pigment"], img: "" },
+  { id: "vitc", name: "סרום ויטמין C", desc: "מאחד גוון העור ומאיר.", price: 0, tags: ["pigment", "wrinkles"], img: "" },
+  { id: "balance", name: "סרום איזון לעור שמן", desc: "מפחית ברק ומצמצם סיכון לפצעונים.", price: 0, tags: ["oily", "acne"], img: "" },
+  { id: "calm", name: "קרם הרגעה", desc: "מרגיע אדמומיות ורגישות.", price: 0, tags: ["sensitive", "redness"], img: "" },
+  { id: "night", name: "קרם לילה מזין", desc: "תיקון והזנה בזמן השינה.", price: 0, tags: ["dry", "wrinkles"], img: "" },
+  { id: "toner", name: "טונר מאזן", desc: "מכין את העור לשלב הסרום.", price: 0, tags: ["combo", "oily", "acne"], img: "" }
+];
+ 
+const SKIN = [["oily","שמן"],["dry","יבש"],["combo","מעורב"],["sensitive","רגיש"]];
+const CONCERN = [["acne","פצעונים"],["pigment","כתמים ופיגמנטציה"],["wrinkles","קמטים וקו עדין"],["redness","אדמומיות"]];
+ 
+/* ===== קוד ===== */
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = (n) => n > 0 ? "₪" + n : "₪[__]";
+const photo = (src, label) => src ? '<div class="ph"><img src="' + esc(src) + '" alt="' + esc(label) + '"></div>' : '<div class="ph">תמונה: ' + esc(label) + '</div>';
+ 
+document.querySelectorAll("[data-link]").forEach((a) => { a.href = CONFIG.links[a.dataset.link]; a.target = "_blank"; a.rel = "noopener"; });
+$("#brandName").textContent = CONFIG.brand; $("#footName").textContent = CONFIG.brand; $("#shipName").textContent = CONFIG.shipping;
+document.title = CONFIG.brand + " | טיפולי פנים";
+ 
+/* טיפולים */
+$("#treatmentList").innerHTML = TREATMENTS.map((t) =>
+  '<article class="card">' + photo(t.img, t.name) +
+  '<div class="top"><h3>' + esc(t.name) + '</h3><div class="meta">' + esc(t.meta) + '</div></div>' +
+  '<p>' + esc(t.desc) + '</p><div class="inc"><b style="font-weight:500">מה כולל:</b> ' + esc(t.includes) + '</div>' +
+  '<a class="btn" data-link="calmark" href="' + esc(CONFIG.links.calmark) + '" target="_blank" rel="noopener">קביעת תור לטיפול</a></article>'
+).join("");
+ 
+/* עגלה */
+let cart = {};
+try { cart = JSON.parse(localStorage.getItem("cart") || "{}"); } catch (e) { cart = {}; }
+const saveCart = () => { try { localStorage.setItem("cart", JSON.stringify(cart)); } catch (e) {} };
+const prodById = (id) => PRODUCTS.find((p) => p.id === id);
+ 
+function addToCart(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); }
+function setQty(id, q) { if (q <= 0) delete cart[id]; else cart[id] = q; saveCart(); renderCart(); }
+ 
+function renderCart() {
+  const ids = Object.keys(cart).filter((id) => prodById(id));
+  const count = ids.reduce((n, id) => n + cart[id], 0);
+  const total = ids.reduce((n, id) => n + cart[id] * prodById(id).price, 0);
+  $("#cartCount").textContent = count;
+  $("#cartTotal").textContent = total > 0 ? "₪" + total : "₪[__]";
+  $("#cartLines").innerHTML = ids.length ? ids.map((id) => {
+    const p = prodById(id);
+    return '<div class="line"><span>' + esc(p.name) + '</span><span class="qty">' +
+      '<button type="button" aria-label="הפחתה" data-dec="' + id + '">−</button><span>' + cart[id] + '</span>' +
+      '<button type="button" aria-label="הוספה" data-inc="' + id + '">+</button></span></div>';
+  }).join("") : '<div class="note">העגלה ריקה. הוסיפי מוצר מהחנות או מההמלצה בשאלון.</div>';
+  $("#checkout").disabled = !ids.length;
+  $("#checkout").style.opacity = ids.length ? 1 : .5;
+}
+ 
+$("#cartLines").addEventListener("click", (e) => {
+  const inc = e.target.dataset.inc, dec = e.target.dataset.dec;
+  if (inc) setQty(inc, (cart[inc] || 0) + 1);
+  if (dec) setQty(dec, (cart[dec] || 0) - 1);
+});
+ 
+$("#checkout").addEventListener("click", () => {
+  const ids = Object.keys(cart).filter((id) => prodById(id));
+  if (!ids.length) return;
+  const lines = ids.map((id) => "• " + prodById(id).name + " × " + cart[id]).join("\n");
+  const msg = "היי, אשמח להזמין:\n" + lines + "\n\nאשמח לקבל קישור לתשלום ופרטי משלוח.";
+  window.open("https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+});
+ 
+/* חנות */
+$("#productList").innerHTML = PRODUCTS.map((p) =>
+  '<article class="prod">' + photo(p.img, p.name) + '<h3>' + esc(p.name) + '</h3><p>' + esc(p.desc) + '</p>' +
+  '<div class="foot"><b style="font-weight:500">' + money(p.price) + '</b>' +
+  '<button class="btn solid sm" type="button" data-add="' + p.id + '">הוספה</button></div></article>'
+).join("");
+$("#productList").addEventListener("click", (e) => { if (e.target.dataset.add) addToCart(e.target.dataset.add); });
+ 
+/* שאלון */
+let quiz = { step: 1, skin: null, concern: null };
+function renderQuiz() {
+  const box = $("#quizBox");
+  if (quiz.step === 1 || quiz.step === 2) {
+    const list = quiz.step === 1 ? SKIN : CONCERN;
+    box.innerHTML = '<div class="step">שאלה ' + quiz.step + ' מתוך 2</div>' +
+      '<div class="q">' + (quiz.step === 1 ? "איך היית מתארת את סוג העור שלך?" : "מה הכי מפריע לך בעור?") + '</div>' +
+      '<div class="opts">' + list.map((o) => '<button class="opt" type="button" data-k="' + o[0] + '">' + o[1] + '</button>').join("") + '</div>' +
+      (quiz.step === 2 ? '<button class="link" type="button" data-back="1">חזרה לשאלה הקודמת</button>' : "");
+  } else {
+    const skinName = SKIN.find((s) => s[0] === quiz.skin)[1], conName = CONCERN.find((c) => c[0] === quiz.concern)[1];
+    const recs = PRODUCTS.map((p) => ({ p, s: (p.tags.includes(quiz.skin) ? 2 : 0) + (p.tags.includes(quiz.concern) ? 2 : 0) + (p.tags.includes("all") ? 1 : 0) }))
+      .sort((a, b) => b.s - a.s).slice(0, 3);
+    box.innerHTML = '<div class="q">ההמלצה שלנו: עור ' + skinName + ' · ' + conName + '</div>' +
+      recs.map((r) => '<div class="rec"><div><b>' + esc(r.p.name) + '</b><small>' + esc(r.p.desc) + '</small></div>' +
+        '<button class="btn solid sm" type="button" data-add="' + r.p.id + '">הוספה לעגלה</button></div>').join("") +
+      '<div class="disc">ההמלצה כללית. לאבחון מדויק קבעי תור.</div>' +
+      '<button class="link" type="button" data-reset="1">להתחיל מחדש</button>';
+  }
+}
+$("#quizBox").addEventListener("click", (e) => {
+  const t = e.target;
+  if (t.dataset.k) { if (quiz.step === 1) { quiz.skin = t.dataset.k; quiz.step = 2; } else { quiz.concern = t.dataset.k; quiz.step = 3; } renderQuiz(); }
+  else if (t.dataset.back) { quiz.step = 1; renderQuiz(); }
+  else if (t.dataset.reset) { quiz = { step: 1, skin: null, concern: null }; renderQuiz(); }
+  else if (t.dataset.add) { addToCart(t.dataset.add); t.textContent = "נוסף ✓"; }
+});
+ 
+/* גיפט קארד */
+let gift = CONFIG.giftAmounts[0];
+function renderGift() {
+  $("#giftChips").innerHTML = CONFIG.giftAmounts.map((a) =>
+    '<button class="chip" type="button" aria-pressed="' + (a === gift) + '" data-g="' + a + '">₪' + a + '</button>').join("");
+}
+$("#giftChips").addEventListener("click", (e) => { if (e.target.dataset.g) { gift = +e.target.dataset.g; renderGift(); } });
+$("#giftBtn").href = CONFIG.giftPayLink; $("#giftBtn").target = "_blank"; $("#giftBtn").rel = "noopener";
+ 
+renderQuiz(); renderCart(); renderGift();
+</script>
 </body>
 </html>
-EOF
+ 
