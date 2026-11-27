@@ -82,6 +82,8 @@ nav.links a:hover{color:var(--accent)}
 .qty{display:flex;align-items:center;gap:8px}
 .qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:18px;line-height:1}
 .note{font-size:14px;color:var(--mute)}
+.fields{display:grid;gap:8px;margin:10px 0}
+.fields input{font:inherit;padding:12px 14px;border:1px solid var(--ink);border-radius:12px;background:var(--bg);color:var(--ink)}
 /* club */
 .perks{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-bottom:28px}
 .perk{background:var(--bg2);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:8px}
@@ -104,6 +106,7 @@ footer .cols>div{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;g
 footer a{color:var(--bg)}
 footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (max-width:700px){nav.links{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto}nav.links a{white-space:nowrap}}
 @media (max-width:560px){.wrap{padding:0 16px}section{padding:48px 0}.qbox{padding:20px}}
 </style>
 </head>
@@ -161,6 +164,12 @@ footer small{color:#C9D6CE;font-size:15px;line-height:1.7}
 </div>
 <div style="max-width:360px">
 <p class="note">משלוח: <span id="shipName">[חברת המשלוחים]</span>. הזמנה נשלחת בוואטסאפ, ותקבלי קישור תשלום מאובטח באשראי.</p>
+<div class="fields">
+<input id="cName" placeholder="שם מלא" autocomplete="name">
+<input id="cPhone" placeholder="טלפון" type="tel" autocomplete="tel">
+<input id="cAddr" placeholder="כתובת למשלוח (רחוב, מספר, עיר)" autocomplete="street-address">
+</div>
+<p class="note" id="shipLine"></p>
 <p style="font-weight:500;font-size:18px;margin:8px 0">סה״כ: <span id="cartTotal">₪0</span></p>
 <button class="btn accent" id="checkout" type="button">שליחת הזמנה בוואטסאפ</button>
 </div>
@@ -232,8 +241,9 @@ const CONFIG = {
   },
   whatsappNumber: "972503568603",
   shipping: "[חברת המשלוחים]",
-  giftAmounts: [150, 250, 400],
-  giftPayLink: "https://GIFT-PAYMENT-LINK-HERE"  // קישור תשלום מחברת הסליקה
+  shippingFee: 30,
+  freeShippingFrom: 300,
+  giftAmounts: [150, 250, 400]
 };
 
 /* תמונה: שימי נתיב בשדה img, למשל "img/facial.jpg". ריק = מקום לתמונה */
@@ -287,12 +297,19 @@ const prodById = (id) => PRODUCTS.find((p) => p.id === id);
 function addToCart(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); }
 function setQty(id, q) { if (q <= 0) delete cart[id]; else cart[id] = q; saveCart(); renderCart(); }
 
-function renderCart() {
+function calc() {
   const ids = Object.keys(cart).filter((id) => prodById(id));
+  const sub = ids.reduce((n, id) => n + cart[id] * prodById(id).price, 0);
+  const ship = sub > 0 && sub < CONFIG.freeShippingFrom ? CONFIG.shippingFee : 0;
+  return { ids, sub, ship, total: sub + ship };
+}
+
+function renderCart() {
+  const { ids, sub, ship, total } = calc();
   const count = ids.reduce((n, id) => n + cart[id], 0);
-  const total = ids.reduce((n, id) => n + cart[id] * prodById(id).price, 0);
   $("#cartCount").textContent = count;
   $("#cartTotal").textContent = total > 0 ? "₪" + total : "₪[__]";
+  $("#shipLine").textContent = sub > 0 ? (ship ? "עלות משלוח: ₪" + ship + " (חינם מעל ₪" + CONFIG.freeShippingFrom + ")" : "משלוח חינם") : "";
   $("#cartLines").innerHTML = ids.length ? ids.map((id) => {
     const p = prodById(id);
     return '<div class="line"><span>' + esc(p.name) + '</span><span class="qty">' +
@@ -310,10 +327,13 @@ $("#cartLines").addEventListener("click", (e) => {
 });
 
 $("#checkout").addEventListener("click", () => {
-  const ids = Object.keys(cart).filter((id) => prodById(id));
+  const { ids, sub, ship, total } = calc();
   if (!ids.length) return;
+  const name = $("#cName").value.trim(), phone = $("#cPhone").value.trim(), addr = $("#cAddr").value.trim();
+  if (!name || !phone || !addr) { alert("נא למלא שם, טלפון וכתובת למשלוח"); return; }
   const lines = ids.map((id) => "• " + prodById(id).name + " × " + cart[id]).join("\n");
-  const msg = "היי, אשמח להזמין:\n" + lines + "\n\nאשמח לקבל קישור לתשלום ופרטי משלוח.";
+  const msg = "היי, אשמח להזמין:\n" + lines + "\n\nמוצרים: ₪" + sub + "\nמשלוח: ₪" + ship + "\nסה״כ: ₪" + total +
+    "\n\nשם: " + name + "\nטלפון: " + phone + "\nכתובת: " + addr + "\n\nאשמח לקבל קישור לתשלום.";
   window.open("https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
 });
 
@@ -359,9 +379,10 @@ let gift = CONFIG.giftAmounts[0];
 function renderGift() {
   $("#giftChips").innerHTML = CONFIG.giftAmounts.map((a) =>
     '<button class="chip" type="button" aria-pressed="' + (a === gift) + '" data-g="' + a + '">₪' + a + '</button>').join("");
+  $("#giftBtn").href = "https://wa.me/" + CONFIG.whatsappNumber + "?text=" + encodeURIComponent("היי, אשמח לרכוש גיפט קארד בסך ₪" + gift);
 }
 $("#giftChips").addEventListener("click", (e) => { if (e.target.dataset.g) { gift = +e.target.dataset.g; renderGift(); } });
-$("#giftBtn").href = CONFIG.giftPayLink; $("#giftBtn").target = "_blank"; $("#giftBtn").rel = "noopener";
+$("#giftBtn").target = "_blank"; $("#giftBtn").rel = "noopener";
 
 renderQuiz(); renderCart(); renderGift();
 </script>
